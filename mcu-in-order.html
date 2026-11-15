@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MCU in order</title>
+<meta name="description" content="Every Marvel Studios film and series in release order, story order and by hero, with where to watch.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=Newsreader:ital,opsz,wght@1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f4f4f1;--panel:#ffffff;--line:#e2e2dd;--ink:#16181b;--sub:#686b70;--mute:#b8babd;--guide:#e7e7e2;--rel:#c47400;--sto:#0a87a2;--on-hero:#fff;--shadow:0 24px 60px -24px rgba(20,22,26,.28);
+  --h-ironman:#df4339;--h-cap:#2f6fe6;--h-thor:#c28f00;--h-hulk:#2d9a52;--h-widow:#5b5f66;--h-spidey:#de3f88;--h-panther:#7a5ade;--h-wanda:#dd6716;--h-strange:#0f958c;--h-loki:#6c960f;
+  --ease:cubic-bezier(.2,.7,.2,1)}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0f1113;--panel:#16191c;--line:#262a2f;--ink:#eceae4;--sub:#9a9c9e;--mute:#4b5056;--guide:#1d2125;--rel:#ffb547;--sto:#5fd4e8;--on-hero:#111;--shadow:0 30px 80px -20px rgba(0,0,0,.7);
+  --h-ironman:#ff5a4e;--h-cap:#4f8dff;--h-thor:#ffd166;--h-hulk:#57d27a;--h-widow:#e8e6e1;--h-spidey:#ff6fb1;--h-panther:#a98bff;--h-wanda:#ff8f3d;--h-strange:#3fd0c9;--h-loki:#b5e35a}}
+:root[data-theme=dark]{--bg:#0f1113;--panel:#16191c;--line:#262a2f;--ink:#eceae4;--sub:#9a9c9e;--mute:#4b5056;--guide:#1d2125;--rel:#ffb547;--sto:#5fd4e8;--on-hero:#111;--shadow:0 30px 80px -20px rgba(0,0,0,.7);
+  --h-ironman:#ff5a4e;--h-cap:#4f8dff;--h-thor:#ffd166;--h-hulk:#57d27a;--h-widow:#e8e6e1;--h-spidey:#ff6fb1;--h-panther:#a98bff;--h-wanda:#ff8f3d;--h-strange:#3fd0c9;--h-loki:#b5e35a}
+*{box-sizing:border-box}
+html,body{background:var(--bg)}
+body{margin:0;color:var(--ink);font:15px/1.5 "Archivo",system-ui,sans-serif;-webkit-font-smoothing:antialiased;transition:background .3s,color .3s}
+button,select{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--sto);outline-offset:2px;border-radius:6px}
+
+/* header */
+.top{position:sticky;top:0;z-index:10;display:flex;align-items:center;gap:20px;padding:14px 32px;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.logo{display:flex;gap:10px;align-items:center;font-weight:800;font-stretch:125%;letter-spacing:.02em;text-transform:uppercase;font-size:14px;white-space:nowrap}
+.seg{position:relative;display:flex;padding:3px;border:1px solid var(--line);border-radius:999px;background:var(--panel)}
+.seg button{position:relative;z-index:1;border:0;background:none;padding:7px 16px;border-radius:999px;font-size:13.5px;font-weight:600;color:var(--sub);transition:color .2s}
+.seg button[aria-pressed=true]{color:var(--bg)}
+.seg .pill{position:absolute;top:3px;bottom:3px;border-radius:999px;background:var(--ink);transition:left .45s var(--ease),width .45s var(--ease)}
+.sp{flex:1}
+.reg{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:6px 8px;font-size:13px}
+.theme{width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:var(--panel);display:grid;place-items:center}
+.theme svg{transition:transform .5s var(--ease)}
+:root[data-theme=dark] .theme svg{transform:rotate(180deg)}
+
+/* lens heading + controls */
+.head{max-width:1180px;margin:auto;padding:40px 32px 0;display:flex;align-items:flex-end;gap:32px;flex-wrap:wrap}
+.copy{flex:1;min-width:300px}
+.copy h1{margin:0;font-size:clamp(30px,3.6vw,46px);line-height:1;font-weight:800;font-stretch:125%;letter-spacing:-.01em;text-transform:uppercase}
+.copy p{margin:12px 0 0;font:italic 19px/1.4 "Newsreader";color:var(--sub);max-width:52ch}
+.copy>*{transition:opacity .25s,transform .25s var(--ease)}
+.copy.swap>*{opacity:0;transform:translateY(6px)}
+.ctl{display:none;align-items:center;gap:8px;flex-wrap:wrap}
+.ctl.on{display:flex;animation:fade .4s var(--ease)}
+.ctl[data-for=heroes]{flex-basis:100%}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}}
+.btn{border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:8px 14px;font-size:13px;font-weight:600;color:var(--sub);transition:color .2s,border-color .2s,background .2s}
+.btn:hover{color:var(--ink);border-color:var(--sub)}
+.btn.main{background:var(--rel);border-color:var(--rel);color:#111}
+.hero-chip{display:inline-flex;align-items:center;gap:7px}
+.hero-chip i{width:9px;height:9px;border-radius:50%;background:var(--c)}
+.hero-chip[aria-pressed=true]{background:var(--c);border-color:var(--c);color:var(--on-hero)}
+.hero-chip[aria-pressed=true] i{background:var(--on-hero)}
+.cap{max-width:1180px;margin:auto;padding:14px 32px 0;min-height:40px;font-size:14px;color:var(--sub)}
+.cap b{color:var(--ink)}.cap .j{color:var(--sto);font-weight:600}
+.cap span{display:inline-block;animation:fade .35s var(--ease)}
+
+/* stage */
+.stage{max-width:1180px;margin:10px auto 0;padding:0 20px;overflow-x:auto}
+#c{display:block;width:100%;min-width:760px;height:auto}
+#c text{font-family:Archivo}
+.t{cursor:pointer}
+.t path{fill:none;stroke-width:1.5;opacity:.55;transition:opacity .25s,stroke-width .2s}
+.t text{font-size:11.5px;fill:var(--sub);transition:fill .2s}
+.t text.e1{font-weight:700;fill:var(--ink)}
+.t circle{stroke:var(--bg);stroke-width:2.5}
+#c.focus .t:not(.on) path{opacity:.08}
+#c.focus .t:not(.on) text{fill:var(--mute)}
+.t.on path{opacity:1;stroke-width:2.8}
+.t.on text{fill:var(--ink)}
+.lyr{opacity:0;pointer-events:none;transition:opacity .5s}
+#c[data-lens=order] #L-order,#c[data-lens=time] #L-time,#c[data-lens=heroes].ready #L-heroes{opacity:1;pointer-events:auto}
+.colh{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase}
+.guide{fill:none;stroke:var(--guide);stroke-width:20;stroke-linecap:round}
+.yr{font-size:11px;font-weight:700;fill:var(--sto);letter-spacing:.04em}
+.relall{fill:none;stroke:var(--rel);stroke-width:1;opacity:.12}
+.rel{fill:none;stroke:var(--rel);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.halo{fill:none;stroke:var(--rel);stroke-width:2}
+.tip{font-size:13.5px;font-weight:700;fill:var(--ink);paint-order:stroke;stroke:var(--bg);stroke-width:5px;pointer-events:none}
+.ring{fill:none;stroke:var(--line)}
+.ring.d{stroke-dasharray:2 7}
+.lk{fill:none;stroke-width:1.3;opacity:.5;transition:opacity .2s}
+#L-heroes.hov .lk{opacity:.06}#L-heroes.hov .lk.on{opacity:.9}
+.co{cursor:pointer}.co text{font-size:12px;font-weight:700;fill:var(--sub)}.co .ini{font-size:12px;font-weight:800;fill:var(--on-hero)}
+.co:hover circle{transform:scale(1.08)}.co circle{transform-box:fill-box;transform-origin:center;transition:transform .2s var(--ease)}
+.ctr .nm{font-size:20px;font-weight:800;font-stretch:120%;text-transform:uppercase;fill:var(--ink)}
+.ctr .sb{font:italic 15px Newsreader;fill:var(--sub)}
+.legend{max-width:1180px;margin:auto;padding:6px 32px 0;display:flex;gap:18px;flex-wrap:wrap;font-size:12.5px;color:var(--sub)}
+.legend span{display:flex;align-items:center;gap:7px}.legend i{width:18px;height:3px;border-radius:2px;background:var(--c)}
+.legend [hidden]{display:none}
+footer{max-width:1180px;margin:auto;padding:28px 32px 40px;font-size:12px;color:var(--sub)}
+
+/* card */
+.card{position:fixed;z-index:20;top:76px;right:18px;width:min(360px,calc(100vw - 36px));max-height:calc(100vh - 94px);overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);
+  transform:translateX(calc(100% + 30px));opacity:0;visibility:hidden;transition:transform .42s var(--ease),opacity .42s,visibility 0s .42s}
+.card.on{transform:none;opacity:1;visibility:visible;transition:transform .42s var(--ease),opacity .42s}
+.card .art{height:120px;position:relative;display:flex;align-items:flex-end;padding:14px 18px;color:#fff}
+.card .art::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.45),transparent 65%)}
+.card .art b{position:relative;z-index:1;font-size:21px;line-height:1.05;font-weight:800;font-stretch:112%;text-transform:uppercase}
+.card .x{position:absolute;z-index:2;top:10px;right:10px;width:30px;height:30px;border-radius:50%;border:0;background:rgba(0,0,0,.35);display:grid;place-items:center}
+.card .bd{padding:16px 18px 18px}
+.clocks{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.clock{border:1px solid var(--line);border-radius:10px;padding:8px 12px}
+.clock small{display:block;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;font-weight:700}
+.clock.r small{color:var(--rel)}.clock.s small{color:var(--sto)}
+.clock span{font-size:22px;font-weight:800;font-stretch:110%;font-variant-numeric:tabular-nums}
+.clock em{font-style:normal;color:var(--sub);font-size:12px;margin-left:6px}
+.hook{font:italic 17px/1.35 Newsreader;margin:0 0 12px}
+.facts{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;font-size:13.5px;margin:0 0 12px}
+.facts dt{color:var(--sub)}.facts dd{margin:0;font-weight:600}
+.who{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 14px}
+.watch{width:100%;border:0;border-radius:10px;padding:12px;background:var(--ink);color:var(--bg);font-weight:800;font-stretch:110%;text-transform:uppercase;letter-spacing:.04em}
+@media (max-width:760px){.top{padding:10px 14px;gap:10px;flex-wrap:wrap}.seg{order:3;width:100%}.seg button{flex:1}.head{padding:24px 16px 0}.cap,.legend,footer{padding-left:16px;padding-right:16px}.stage{padding:0 8px}
+  .card{top:auto;bottom:10px;left:10px;right:10px;width:auto;max-height:72vh;transform:translateY(calc(100% + 20px))}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{transition-duration:.01ms!important;animation-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="logo"><svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><circle cx="10" cy="14" r="8" fill="none" stroke="var(--rel)" stroke-width="2.5"/><circle cx="18" cy="14" r="8" fill="none" stroke="var(--sto)" stroke-width="2.5"/></svg>MCU in order</div>
+  <div class="seg" id="seg" role="group" aria-label="View"><span class="pill" aria-hidden="true"></span><button data-l="order" aria-pressed="true">Order</button><button data-l="time" aria-pressed="false">Time</button><button data-l="heroes" aria-pressed="false">Heroes</button></div>
+  <span class="sp"></span>
+  <select class="reg" id="reg" aria-label="Your country"><option>IN</option><option>US</option><option>UK</option></select>
+  <button class="theme" id="theme" aria-label="Switch light or dark"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 1.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg></button>
+</header>
+<section class="head">
+  <div class="copy" id="copy"><h1></h1><p></p></div>
+  <div class="ctl" data-for="order"><button class="btn" id="redraw">Replay</button></div>
+  <div class="ctl" data-for="time"><button class="btn" id="prev" aria-label="Previous release">←</button><button class="btn main" id="play">Play release order</button><button class="btn" id="next" aria-label="Next release">→</button></div>
+  <div class="ctl" data-for="heroes" id="heroes" role="group" aria-label="Choose a hero"></div>
+</section>
+<div class="cap" id="cap" aria-live="polite"></div>
+<main class="stage"><svg id="c" viewBox="0 0 1100 900" data-lens="order" role="img" aria-label="Marvel titles in release order, story order and by hero"></svg></main>
+<div class="legend" id="legend"></div>
+<footer>Sample data for a design mock: dates, story order, cast and streaming availability are unverified. A fan guide, not affiliated with Marvel or Disney.</footer>
+<aside class="card" id="card" aria-live="polite" aria-label="Title details"></aside>
+<script>
+// SAMPLE DATA for the design mocks only. Dates, runtimes, story order and streaming availability are
+// from memory plus one web check (2026-11-15) and are NOT verified. The real build pulls availability per
+// country from TMDB's watch-provider data (JustWatch) and needs a checked order.
+// Array order = story (in-universe) order. kind: film | series | special | short | anim
+// e: 1 essential, 2 recommended, 3 optional. pc: post-credit scenes. c: two colours for the generated key art.
+window.TITLES = [
+  { id: "catfa", t: "Captain America: The First Avenger", k: "film", d: "2011-07-22", y: 1943, ph: 1, m: 124, e: 1, pc: 1, c: ["#3b5b8c", "#c9a66b"], hook: "A skinny kid from Brooklyn volunteers for an experiment and ends up in the ice." },
+  { id: "cm", t: "Captain Marvel", k: "film", d: "2019-03-08", y: 1995, ph: 3, m: 123, e: 2, pc: 2, c: ["#1f3a7a", "#e2a33a"], hook: "A Kree soldier crash-lands in 1995 and finds out who she was." },
+  { id: "im", t: "Iron Man", k: "film", d: "2008-05-02", y: 2008, ph: 1, m: 126, e: 1, pc: 1, c: ["#9e1b1b", "#e8b33d"], hook: "A weapons dealer builds a suit in a cave. Everything starts here." },
+  { id: "im2", t: "Iron Man 2", k: "film", d: "2010-05-07", y: 2010, ph: 1, m: 124, e: 3, pc: 1, c: ["#7d1b1b", "#b9b9c0"], hook: "Tony is dying from the thing keeping him alive." },
+  { id: "hulk", t: "The Incredible Hulk", k: "film", d: "2008-06-13", y: 2010, ph: 1, m: 112, e: 3, pc: 1, c: ["#2f5d2a", "#8fbf4a"], w: "rent", hook: "Bruce Banner on the run. Later films barely mention it." },
+  { id: "thor", t: "Thor", k: "film", d: "2011-05-06", y: 2010, ph: 1, m: 115, e: 2, pc: 1, c: ["#3d4f7a", "#d9c27a"], hook: "A god loses his hammer in New Mexico." },
+  { id: "avg", t: "The Avengers", k: "film", d: "2012-05-04", y: 2012, ph: 1, m: 143, e: 1, pc: 2, c: ["#2a3550", "#d64b2a"], hook: "Six heroes, one city, one alien army." },
+  { id: "tdw", t: "Thor: The Dark World", k: "film", d: "2013-11-08", y: 2013, ph: 2, m: 112, e: 3, pc: 2, c: ["#2b2633", "#b0412e"], hook: "Introduces the Reality Stone. Watch it for that." },
+  { id: "im3", t: "Iron Man 3", k: "film", d: "2013-05-03", y: 2013, ph: 2, m: 130, e: 2, pc: 1, c: ["#8a2d14", "#f0c14a"], hook: "Tony after New York: no sleep, too many suits." },
+  { id: "tws", t: "Captain America: The Winter Soldier", k: "film", d: "2014-04-04", y: 2014, ph: 2, m: 136, e: 1, pc: 2, c: ["#283447", "#9aa7b8"], hook: "S.H.I.E.L.D. is not what it seems." },
+  { id: "gotg", t: "Guardians of the Galaxy", k: "film", d: "2014-08-01", y: 2014, ph: 2, m: 121, e: 1, pc: 1, c: ["#3a1f5c", "#f08a3c"], hook: "Five misfits and an orb everyone wants." },
+  { id: "gotg2", t: "Guardians of the Galaxy Vol. 2", k: "film", d: "2017-05-05", y: 2014, ph: 3, m: 136, e: 2, pc: 5, c: ["#5a2a6e", "#ff9fb3"], hook: "Peter meets his father. Five post-credit scenes." },
+  { id: "groot", t: "I Am Groot", k: "short", d: "2022-08-10", y: 2014, ph: 4, m: 20, ep: 5, e: 3, pc: 0, c: ["#3c5a2a", "#c3d36b"], hook: "Tiny Groot shorts. Pure fun, skip freely." },
+  { id: "aou", t: "Avengers: Age of Ultron", k: "film", d: "2015-05-01", y: 2015, ph: 2, m: 141, e: 1, pc: 1, c: ["#3c3f46", "#c23a2b"], hook: "Tony builds a peacekeeper. It disagrees." },
+  { id: "am", t: "Ant-Man", k: "film", d: "2015-07-17", y: 2015, ph: 2, m: 117, e: 2, pc: 2, c: ["#5b1e1e", "#bfbfbf"], hook: "A thief shrinks. The quantum realm opens." },
+  { id: "cw", t: "Captain America: Civil War", k: "film", d: "2016-05-06", y: 2016, ph: 3, m: 147, e: 1, pc: 2, c: ["#2c3a55", "#a83232"], hook: "The Avengers split over who gets to control them." },
+  { id: "bw", t: "Black Widow", k: "film", d: "2021-07-09", y: 2016, ph: 4, m: 134, e: 2, pc: 1, c: ["#1d1d22", "#c8313a"], hook: "Natasha on the run, and the family she left." },
+  { id: "bp", t: "Black Panther", k: "film", d: "2018-02-16", y: 2016, ph: 3, m: 134, e: 1, pc: 2, c: ["#24133a", "#9b6cd6"], hook: "A new king, and a cousin with a claim." },
+  { id: "hc", t: "Spider-Man: Homecoming", k: "film", d: "2017-07-07", y: 2016, ph: 3, m: 133, e: 2, pc: 2, c: ["#b3202a", "#2a4fa8"], w: "sony", hook: "Peter wants to be an Avenger. He has homework." },
+  { id: "ds", t: "Doctor Strange", k: "film", d: "2016-11-04", y: 2016, ph: 3, m: 115, e: 2, pc: 2, c: ["#2a2a5c", "#e07b28"], hook: "A surgeon loses his hands and finds magic." },
+  { id: "rag", t: "Thor: Ragnarok", k: "film", d: "2017-11-03", y: 2017, ph: 3, m: 130, e: 1, pc: 2, c: ["#4a1f6e", "#ffb02e"], hook: "Asgard ends. Thor gets a haircut and a comedy." },
+  { id: "amw", t: "Ant-Man and the Wasp", k: "film", d: "2018-07-06", y: 2018, ph: 3, m: 118, e: 3, pc: 2, c: ["#5b1e1e", "#e2c14a"], hook: "Its mid-credit scene matters more than the film." },
+  { id: "iw", t: "Avengers: Infinity War", k: "film", d: "2018-04-27", y: 2018, ph: 3, m: 149, e: 1, pc: 1, c: ["#3b2a52", "#d9a23a"], hook: "Thanos comes for the stones. Half of everyone goes." },
+  { id: "eg", t: "Avengers: Endgame", k: "film", d: "2019-04-26", y: 2023, ph: 3, m: 181, e: 1, pc: 0, c: ["#2a1d3d", "#c9a23e"], hook: "Five years later. One more try." },
+  { id: "loki1", t: "Loki — Season 1", k: "series", d: "2021-06-09", y: 2012, ph: 4, m: 300, ep: 6, e: 1, pc: 0, c: ["#1f4a3a", "#d8b44a"], hook: "The TVA catches a variant. The multiverse begins here." },
+  { id: "wif1", t: "What If...? — Season 1", k: "anim", d: "2021-08-11", y: 2023, ph: 4, m: 300, ep: 9, e: 3, pc: 0, c: ["#3b2a1d", "#f2c45a"], hook: "Animated alternate takes. Optional, but sets up Multiverse of Madness." },
+  { id: "wv", t: "WandaVision", k: "series", d: "2021-01-15", y: 2023, ph: 4, m: 350, ep: 9, e: 1, pc: 0, c: ["#c23a6b", "#f2d0a4"], hook: "A sitcom suburb that is not a sitcom." },
+  { id: "sc", t: "Shang-Chi and the Legend of the Ten Rings", k: "film", d: "2021-09-03", y: 2024, ph: 4, m: 132, e: 2, pc: 2, c: ["#7a1a1a", "#e8b04a"], hook: "A valet in San Francisco, and a father with ten rings." },
+  { id: "fws", t: "The Falcon and the Winter Soldier", k: "series", d: "2021-03-19", y: 2024, ph: 4, m: 300, ep: 6, e: 1, pc: 0, c: ["#23324a", "#c9ced6"], hook: "Who carries the shield now?" },
+  { id: "ffh", t: "Spider-Man: Far From Home", k: "film", d: "2019-07-02", y: 2024, ph: 3, m: 129, e: 2, pc: 2, c: ["#2a4fa8", "#b3202a"], w: "sony", hook: "School trip to Europe. Ends with the worst reveal." },
+  { id: "eter", t: "Eternals", k: "film", d: "2021-11-05", y: 2024, ph: 4, m: 156, e: 3, pc: 2, c: ["#5a3a1a", "#f0d27a"], hook: "Ten immortals who were here all along." },
+  { id: "nwh", t: "Spider-Man: No Way Home", k: "film", d: "2021-12-17", y: 2024, ph: 4, m: 148, e: 1, pc: 2, c: ["#b3202a", "#1d2a55"], w: "sony", hook: "Everyone knows who Peter is. A spell goes wrong." },
+  { id: "mom", t: "Doctor Strange in the Multiverse of Madness", k: "film", d: "2022-05-06", y: 2024, ph: 4, m: 126, e: 2, pc: 2, c: ["#3b1a5a", "#e85a8a"], hook: "Strange chases a girl who jumps universes." },
+  { id: "hawk", t: "Hawkeye", k: "series", d: "2021-11-24", y: 2024, ph: 4, m: 290, ep: 6, e: 2, pc: 0, c: ["#4a2a6a", "#f0a030"], hook: "Clint wants Christmas off. Kate Bishop has other plans." },
+  { id: "mk", t: "Moon Knight", k: "series", d: "2022-03-30", y: 2025, ph: 4, m: 280, ep: 6, e: 3, pc: 0, c: ["#2a2a2e", "#e8e2d0"], hook: "A gift-shop clerk wakes up in someone else's life." },
+  { id: "wf", t: "Black Panther: Wakanda Forever", k: "film", d: "2022-11-11", y: 2025, ph: 4, m: 161, e: 2, pc: 1, c: ["#1a2a4a", "#6ab0c8"], hook: "Wakanda grieves while an ocean kingdom rises." },
+  { id: "echo", t: "Echo", k: "series", d: "2024-01-09", y: 2025, ph: 5, m: 210, ep: 5, e: 3, pc: 0, c: ["#3a2418", "#d97a3a"], hook: "Maya Lopez goes home, with Kingpin behind her." },
+  { id: "she", t: "She-Hulk: Attorney at Law", k: "series", d: "2022-08-18", y: 2025, ph: 4, m: 300, ep: 9, e: 3, pc: 0, c: ["#3c6a2a", "#e88ab0"], hook: "A lawyer who is also seven feet tall and green." },
+  { id: "msm", t: "Ms. Marvel", k: "series", d: "2022-06-08", y: 2025, ph: 4, m: 270, ep: 6, e: 2, pc: 0, c: ["#2a4a8a", "#f04a5a"], hook: "A Jersey City teen with a bangle and big dreams." },
+  { id: "tlt", t: "Thor: Love and Thunder", k: "film", d: "2022-07-08", y: 2025, ph: 4, m: 119, e: 3, pc: 2, c: ["#5a2a8a", "#ff6ab0"], hook: "Jane picks up the hammer. Gorr kills gods." },
+  { id: "wbn", t: "Werewolf by Night", k: "special", d: "2022-10-07", y: 2025, ph: 4, m: 53, e: 3, pc: 0, c: ["#1a1a1a", "#c8c8c8"], hook: "A black-and-white monster hunt. One evening." },
+  { id: "hol", t: "The Guardians of the Galaxy Holiday Special", k: "special", d: "2022-11-25", y: 2025, ph: 4, m: 44, e: 3, pc: 0, c: ["#1f5a3a", "#e8463a"], hook: "They kidnap Kevin Bacon for Peter's Christmas." },
+  { id: "quant", t: "Ant-Man and the Wasp: Quantumania", k: "film", d: "2023-02-17", y: 2025, ph: 5, m: 125, e: 3, pc: 2, c: ["#2a1a4a", "#4ac8e8"], hook: "Down into the quantum realm. Meet Kang." },
+  { id: "gotg3", t: "Guardians of the Galaxy Vol. 3", k: "film", d: "2023-05-05", y: 2026, ph: 5, m: 150, e: 2, pc: 2, c: ["#3a1a5a", "#ff8a3a"], hook: "Rocket's story. Bring tissues." },
+  { id: "si", t: "Secret Invasion", k: "series", d: "2023-06-21", y: 2025, ph: 5, m: 270, ep: 6, e: 3, pc: 0, c: ["#1f3a2a", "#9ac86a"], hook: "Fury comes back to a planet full of Skrulls." },
+  { id: "marv", t: "The Marvels", k: "film", d: "2023-11-10", y: 2026, ph: 5, m: 105, e: 3, pc: 1, c: ["#1f2a6a", "#f0c03a"], hook: "Three heroes swap places every time they use their powers." },
+  { id: "loki2", t: "Loki — Season 2", k: "series", d: "2023-10-05", y: 2012, ph: 5, m: 300, ep: 6, e: 2, pc: 0, c: ["#1f4a3a", "#e8c45a"], hook: "The TVA is falling apart, and so is time." },
+  { id: "dw", t: "Deadpool & Wolverine", k: "film", d: "2024-07-26", y: 2024, ph: 5, m: 128, e: 2, pc: 1, c: ["#8a1a1a", "#f0c82a"], hook: "The Fox universe gets a farewell, loudly." },
+  { id: "agatha", t: "Agatha All Along", k: "series", d: "2024-09-18", y: 2026, ph: 5, m: 330, ep: 9, e: 3, pc: 0, c: ["#3a1a4a", "#8ac85a"], hook: "Agatha walks the Witches' Road." },
+  { id: "dd1", t: "Daredevil: Born Again — Season 1", k: "series", d: "2025-03-04", y: 2026, ph: 5, m: 430, ep: 9, e: 2, pc: 0, c: ["#5a0f12", "#1a1a1a"], hook: "Matt Murdock and Wilson Fisk, mayor of New York." },
+  { id: "bnw", t: "Captain America: Brave New World", k: "film", d: "2025-02-14", y: 2027, ph: 5, m: 118, e: 2, pc: 1, c: ["#2a3a5a", "#d63a3a"], hook: "Sam Wilson's first film with the shield." },
+  { id: "tbolts", t: "Thunderbolts*", k: "film", d: "2025-05-02", y: 2027, ph: 5, m: 127, e: 1, pc: 2, c: ["#2a2a2a", "#e8e0c8"], hook: "Rejects and assassins forced into a team." },
+  { id: "iron", t: "Ironheart", k: "series", d: "2025-06-24", y: 2027, ph: 5, m: 260, ep: 6, e: 3, pc: 0, c: ["#6a1a1a", "#f0a03a"], hook: "Riri Williams builds a suit, and makes a deal." },
+  { id: "ff", t: "The Fantastic Four: First Steps", k: "film", d: "2025-07-25", y: 1964, ph: 6, m: 115, e: 1, pc: 2, c: ["#1a4a8a", "#f0e0b0"], hook: "Another Earth, retro future, a family of four." },
+  { id: "wm", t: "Wonder Man", k: "series", d: "2026-01-27", y: 2027, ph: 6, m: 270, ep: 8, e: 3, pc: 0, c: ["#4a1a3a", "#f0c03a"], hook: "An actor with powers chasing a superhero role." },
+  { id: "dd2", t: "Daredevil: Born Again — Season 2", k: "series", d: "2026-03-04", y: 2027, ph: 6, m: 420, ep: 8, e: 2, pc: 0, c: ["#5a0f12", "#2a2a2a"], hook: "Fisk's city, and the people fighting it." },
+  { id: "bnd", t: "Spider-Man: Brand New Day", k: "film", d: "2026-07-31", y: 2027, ph: 6, m: 135, e: 1, pc: 2, c: ["#c0202a", "#1a1a2a"], w: "sony", hook: "Peter, alone and forgotten, starts over." },
+  { id: "vq", t: "VisionQuest", k: "series", d: "2026-10-14", y: 2027, ph: 6, m: 300, ep: 8, e: 2, pc: 0, c: ["#1a3a3a", "#e0e8e8"], hook: "White Vision looks for who he used to be." },
+  { id: "doom", t: "Avengers: Doomsday", k: "film", d: "2026-12-18", y: 2027, ph: 6, m: 150, e: 1, pc: 0, c: ["#1a2a1a", "#7ac85a"], soon: true, hook: "Out December 18. This is where the order is heading." },
+];
+
+// Other Marvel universes, shown as optional branches beside the main line.
+window.BRANCHES = [
+  { id: "defenders", name: "Netflix Defenders", join: "dd1", items: [
+    { t: "Daredevil — Seasons 1–3", k: "series", d: "2015-04-10", ep: 39, m: 2100, c: ["#5a0f12", "#1a1a1a"] },
+    { t: "Jessica Jones — Seasons 1–3", k: "series", d: "2015-11-20", ep: 39, m: 2000, c: ["#2a2a4a", "#a8a8c8"] },
+    { t: "The Punisher — Seasons 1–2", k: "series", d: "2017-11-17", ep: 26, m: 1400, c: ["#1a1a1a", "#e8e8e8"] },
+  ]},
+  { id: "xmen", name: "X-Men (Fox)", join: "dw", items: [
+    { t: "X-Men", k: "film", d: "2000-07-14", m: 104, c: ["#1a2a4a", "#e8c43a"], w: "jh" },
+    { t: "X-Men: Days of Future Past", k: "film", d: "2014-05-23", m: 132, c: ["#2a2a3a", "#c8a03a"], w: "jh" },
+    { t: "Logan", k: "film", d: "2017-03-03", m: 137, c: ["#4a3a2a", "#c8b08a"], w: "jh" },
+  ]},
+  { id: "verse", name: "Spider-Verse", join: "nwh", items: [
+    { t: "Spider-Man: Into the Spider-Verse", k: "anim", d: "2018-12-14", m: 117, c: ["#2a1a5a", "#ff3a6a"], w: "sony" },
+    { t: "Spider-Man: Across the Spider-Verse", k: "anim", d: "2023-06-02", m: 140, c: ["#1a3a6a", "#ff7a3a"], w: "sony" },
+  ]},
+];
+
+window.PROVIDERS = {
+  IN: { jh: "JioHotstar", sony: "Netflix", rent: "Rent · Prime Video" },
+  US: { jh: "Disney+", sony: "Netflix", rent: "Rent · Apple TV" },
+  UK: { jh: "Disney+", sony: "Netflix", rent: "Rent · Prime Video" },
+};
+
+window.MW = {
+  where: (x, region = "IN") => window.PROVIDERS[region][x.w || "jh"],
+  hours: (m) => (m >= 60 ? `${Math.floor(m / 60)}h ${String(m % 60).padStart(2, "0")}m` : `${m}m`),
+  year: (x) => x.d.slice(0, 4),
+  kindLabel: { film: "Film", series: "Series", special: "Special", short: "Shorts", anim: "Animated" },
+  essLabel: { 1: "Essential", 2: "Recommended", 3: "Optional" },
+  release: () => [...window.TITLES].sort((a, b) => a.d.localeCompare(b.d)),
+  story: () => [...window.TITLES],
+};
+
+// SAMPLE DATA for the mocks: who appears where, written from memory, NOT verified (cameos are partial,
+// Avengers: Doomsday is from the announced cast as I remember it). The real build needs a checked cast list.
+// A thread can pass to a successor (shield, mantle): `pass` names who carries it from that title on.
+window.HEROES = [
+  { id: "ironman", name: "Iron Man", short: "IM", col: "#ff5a4e", t: ["im", "im2", "avg", "im3", "aou", "cw", "hc", "iw", "eg"] },
+  { id: "cap", name: "Captain America", short: "CA", col: "#4f8dff", t: ["catfa", "avg", "tws", "aou", "cw", "iw", "eg", "fws", "bnw", "doom"], pass: { fws: "Sam Wilson takes the shield" } },
+  { id: "thor", name: "Thor", short: "TH", col: "#ffd166", t: ["thor", "avg", "tdw", "aou", "rag", "iw", "eg", "tlt", "doom"] },
+  { id: "hulk", name: "Hulk", short: "HK", col: "#57d27a", t: ["hulk", "avg", "aou", "rag", "iw", "eg", "she"] },
+  { id: "widow", name: "Black Widow", short: "BW", col: "#e8e6e1", t: ["im2", "avg", "tws", "aou", "cw", "bw", "iw", "eg", "hawk", "tbolts", "doom"], pass: { hawk: "Yelena Belova carries it on" } },
+  { id: "spidey", name: "Spider-Man", short: "SM", col: "#ff6fb1", t: ["cw", "hc", "iw", "eg", "ffh", "nwh", "bnd"] },
+  { id: "panther", name: "Black Panther", short: "BP", col: "#a98bff", t: ["cw", "bp", "iw", "eg", "wf", "doom"], pass: { wf: "Shuri takes the mantle" } },
+  { id: "wanda", name: "Scarlet Witch", short: "SW", col: "#ff8f3d", t: ["aou", "cw", "iw", "eg", "wv", "mom"] },
+  { id: "strange", name: "Doctor Strange", short: "DS", col: "#3fd0c9", t: ["ds", "rag", "iw", "eg", "nwh", "mom"] },
+  { id: "loki", name: "Loki", short: "LK", col: "#b5e35a", t: ["thor", "avg", "tdw", "rag", "iw", "eg", "loki1", "loki2", "doom"] },
+];
+
+
+</script>
+<script>
+(() => {
+const S = TITLES, R = [...S].sort((a, b) => a.d.localeCompare(b.d));
+const si = new Map(S.map((x, i) => [x.id, i])), ri = new Map(R.map((x, i) => [x.id, i])), byId = new Map(S.map((x) => [x.id, x]));
+const RM = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const W = 1100, H = 900, CX = 550, CY = 452, R1 = 205, R2 = 345, R3 = 432;
+const NS = "http://www.w3.org/2000/svg", svg = document.getElementById("c");
+const short = (t) => t.replace("Captain America: ", "Cap: ").replace("Guardians of the Galaxy", "Guardians").replace("Doctor Strange in the Multiverse of Madness", "Multiverse of Madness").replace(" and the Legend of the Ten Rings", "").replace("Black Panther: ", "").replace(": Attorney at Law", "").replace("The Fantastic Four: ", "Fantastic Four: ").replace(" — ", " ");
+const region = () => document.getElementById("reg").value;
+const hoursOf = (xs) => MW.hours(xs.filter((x) => !x.soon).reduce((s, x) => s + x.m, 0));
+const shift = (x) => ri.get(x.id) - si.get(x.id);
+const curveCol = (x) => (shift(x) > 4 ? "var(--sto)" : shift(x) < -4 ? "var(--rel)" : "var(--mute)");
+const spiralAt = (t) => { const a = -Math.PI / 2 + t * 2.2 * Math.PI * 2, r = 100 + t * 330; return [CX + r * Math.cos(a), CY + r * Math.sin(a), a]; };
+const SP = S.map((x, i) => spiralAt(i / (S.length - 1)));
+
+/* ---------- theme ---------- */
+const root = document.documentElement, store = { get: () => { try { return localStorage.getItem("mcu-theme"); } catch { return null; } }, set: (v) => { try { localStorage.setItem("mcu-theme", v); } catch {} } };
+if (store.get()) root.dataset.theme = store.get();
+document.getElementById("theme").onclick = () => { const dark = root.dataset.theme ? root.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches; root.dataset.theme = dark ? "light" : "dark"; store.set(root.dataset.theme); };
+
+/* ---------- static layers ---------- */
+const el = (tag, attrs = {}, parent = svg) => { const n = document.createElementNS(NS, tag); for (const k in attrs) n.setAttribute(k, attrs[k]); parent.appendChild(n); return n; };
+const Lorder = el("g", { id: "L-order", class: "lyr" }), Ltime = el("g", { id: "L-time", class: "lyr" }), Lheroes = el("g", { id: "L-heroes", class: "lyr" });
+el("text", { x: 340, y: 26, "text-anchor": "end", class: "colh", style: "fill:var(--rel)" }, Lorder).textContent = "Release order";
+el("text", { x: 760, y: 26, class: "colh", style: "fill:var(--sto)" }, Lorder).textContent = "Story order";
+el("path", { class: "guide", d: Array.from({ length: 260 }, (_, i) => spiralAt(i / 259)).map(([x, y], i) => (i ? "L" : "M") + x.toFixed(1) + " " + y.toFixed(1)).join("") }, Ltime);
+let maxY = 0, lastLab = -9;
+S.forEach((x, i) => { const [px, py, a] = SP[i]; if (x.y > maxY && i - lastLab >= 3) { el("text", { class: "yr", x: px + Math.cos(a) * 26, y: py + Math.sin(a) * 26 + 4, "text-anchor": "middle" }, Ltime).textContent = x.y; lastLab = i; } maxY = Math.max(maxY, x.y); });
+const relPath = (k) => R.slice(0, k + 1).map((t, j) => { const [px, py] = SP[si.get(t.id)]; return (j ? "L" : "M") + px.toFixed(1) + " " + py.toFixed(1); }).join("");
+el("path", { class: "relall", d: relPath(R.length - 1) }, Ltime);
+const rel = el("path", { class: "rel", d: "" }, Ltime), halo = el("circle", { class: "halo", r: 0 }, Ltime);
+const linksG = el("g", {}, Lheroes), coG = el("g", {}, Lheroes);
+
+/* ---------- one shape per title: a curve that can shrink into a bead ---------- */
+const E = new Map();
+for (const x of S) {
+  const g = el("g", { class: "t", "data-id": x.id, tabindex: 0, role: "button", "aria-label": x.t });
+  const p = el("path", { style: `stroke:${curveCol(x)}` }, g), c = el("circle", { r: 0 }, g);
+  const ta = el("text", { class: "e" + x.e }, g), tb = el("text", { class: "e" + x.e }, g);
+  ta.textContent = tb.textContent = short(x.t);
+  E.set(x.id, { g, p, c, ta, tb });
+}
+const tip = el("text", { class: "tip" });
+const NUM = ["ax", "ay", "bx", "by", "r", "op", "lo", "lbo", "lx", "ly", "po"];
+let hero = "spidey", orbit = null;
+function layout(lens) {
+  const m = new Map();
+  if (lens === "order") {
+    const top = 50, rh = (H - top - 16) / S.length;
+    for (const x of S) m.set(x.id, { ax: 350, ay: top + ri.get(x.id) * rh, bx: 750, by: top + si.get(x.id) * rh, r: 0, op: 1, lo: 1, lbo: 1, lx: -10, ly: 4, po: 1, anchor: "end", fill: "var(--ink)" });
+  } else if (lens === "time") {
+    S.forEach((x, i) => { const [px, py] = SP[i]; m.set(x.id, { ax: px, ay: py, bx: px, by: py, r: x.e === 1 ? 7 : 4.5, op: 1, lo: 0, lbo: 0, lx: 12, ly: 4, po: 0, anchor: "start", fill: x.e === 1 ? "var(--ink)" : x.e === 2 ? "var(--sub)" : "var(--mute)" }); });
+  } else {
+    const h = HEROES.find((v) => v.id === hero), ts = S.filter((x) => h.t.includes(x.id)), rest = S.filter((x) => !h.t.includes(x.id));
+    ts.forEach((x, i) => { const a = -Math.PI / 2 + (i / ts.length) * Math.PI * 2, c = Math.cos(a);
+      m.set(x.id, { ax: CX + R1 * c, ay: CY + R1 * Math.sin(a), bx: CX + R1 * c, by: CY + R1 * Math.sin(a), r: x.e === 1 ? 8 : 5.5, op: 1, lo: 1, lbo: 0, lx: c * 16, ly: Math.sin(a) * 16 + 4, po: 0, anchor: Math.abs(c) < 0.22 ? "middle" : c > 0 ? "start" : "end", fill: `var(--h-${h.id})`, a }); });
+    rest.forEach((x, i) => { const a = -Math.PI / 2 + (i / rest.length) * Math.PI * 2; m.set(x.id, { ax: CX + R3 * Math.cos(a), ay: CY + R3 * Math.sin(a), bx: CX + R3 * Math.cos(a), by: CY + R3 * Math.sin(a), r: 2.2, op: 0.6, lo: 0, lbo: 0, lx: 0, ly: 0, po: 0, anchor: "start", fill: "var(--mute)" }); });
+    // heroes who share a title sit outside, at the average angle of what they share, pushed apart so they never touch
+    const co = HEROES.filter((o) => o.id !== hero).map((o) => ({ o, sh: ts.filter((x) => o.t.includes(x.id)) })).filter((v) => v.sh.length);
+    co.forEach((v) => { const s = v.sh.reduce((q, x) => [q[0] + Math.cos(m.get(x.id).a), q[1] + Math.sin(m.get(x.id).a)], [0, 0]); v.a = Math.atan2(s[1], s[0]); });
+    co.sort((p, q) => p.a - q.a); const gap = ((Math.PI * 2) / Math.max(co.length, 1)) * 0.72;
+    for (let it = 0; it < 80; it++) for (let i = 0; i < co.length; i++) { const j = (i + 1) % co.length; let d = co[j].a - co[i].a; if (j === 0) d += Math.PI * 2; if (d < gap) { co[i].a -= (gap - d) / 2; co[j].a += (gap - d) / 2; } }
+    orbit = { h, ts, co, m };
+  }
+  return m;
+}
+const cur = new Map();
+function paint() {
+  for (const x of S) {
+    const s = cur.get(x.id), e = E.get(x.id), len = Math.hypot(s.bx - s.ax, s.by - s.ay), mx = (s.ax + s.bx) / 2;
+    e.p.setAttribute("d", len > 1 ? `M${s.ax} ${s.ay}C${mx} ${s.ay} ${mx} ${s.by} ${s.bx} ${s.by}` : "");
+    e.p.setAttribute("stroke-opacity", Math.min(1, len / 250) * s.po);
+    e.c.setAttribute("cx", s.ax); e.c.setAttribute("cy", s.ay); e.c.setAttribute("r", Math.max(0, s.r));
+    e.g.setAttribute("opacity", s.op);
+    e.ta.setAttribute("x", s.ax + s.lx); e.ta.setAttribute("y", s.ay + s.ly); e.ta.setAttribute("opacity", s.lo);
+    e.tb.setAttribute("x", s.bx + 10); e.tb.setAttribute("y", s.by + 4); e.tb.setAttribute("opacity", s.lbo);
+  }
+}
+function drawOrbit() {
+  const { h, ts, co, m } = orbit; linksG.innerHTML = ""; coG.innerHTML = "";
+  co.forEach((v) => { const x0 = CX + R2 * Math.cos(v.a), y0 = CY + R2 * Math.sin(v.a);
+    v.sh.forEach((x) => { const t = m.get(x.id), qx = ((x0 + t.ax) / 2) * 0.6 + CX * 0.4, qy = ((y0 + t.ay) / 2) * 0.6 + CY * 0.4; el("path", { class: "lk", "data-t": x.id, d: `M${x0} ${y0}Q${qx} ${qy} ${t.ax} ${t.ay}`, style: `stroke:var(--h-${v.o.id})` }, linksG); });
+    const g = el("g", { class: "co", "data-h": v.o.id, tabindex: 0, role: "button", "aria-label": "Centre on " + v.o.name }, coG);
+    el("circle", { cx: x0, cy: y0, r: 20, style: `fill:var(--h-${v.o.id})` }, g);
+    el("text", { class: "ini", x: x0, y: y0 + 4.5, "text-anchor": "middle" }, g).textContent = v.o.short;
+    el("text", { x: x0, y: y0 + (y0 > CY ? 38 : -28), "text-anchor": "middle" }, g).textContent = `${v.o.name} · ${v.sh.length}`; });
+  const c = el("g", { class: "ctr" }, coG);
+  el("circle", { cx: CX, cy: CY, r: 70, style: `fill:var(--h-${h.id});opacity:.13` }, c);
+  el("circle", { cx: CX, cy: CY, r: 50, style: `fill:var(--h-${h.id})` }, c);
+  el("text", { x: CX, y: CY + 9, "text-anchor": "middle", style: "font-size:24px;font-weight:800;font-stretch:115%;fill:var(--on-hero)" }, c).textContent = h.short;
+  el("text", { class: "nm", x: CX, y: CY + 100, "text-anchor": "middle" }, c).textContent = h.name;
+  el("text", { class: "sb", x: CX, y: CY + 122, "text-anchor": "middle" }, c).textContent = `${ts.length} titles · ${hoursOf(ts)}`;
+}
+
+/* ---------- moving between views: every title glides from where it is to where it belongs ---------- */
+let lens = "order", raf = 0;
+// labels and curves leave in the first quarter and arrive in the last third, so nothing overlaps mid-flight
+const FADE = new Set(["lo", "lbo", "po"]), fadeK = (k, out) => (out ? Math.min(1, k * 4) : Math.max(0, (k - 0.66) / 0.34));
+const ease = (k) => (k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2);
+function morph(next, instant) {
+  const tgt = layout(next), from = new Map([...cur].map(([k, v]) => [k, { ...v }]));
+  svg.dataset.lens = next; svg.classList.remove("ready", "focus");
+  for (const x of S) { const t = tgt.get(x.id), e = E.get(x.id); e.ta.setAttribute("text-anchor", t.anchor); e.c.style.fill = t.fill; e.g.classList.remove("on"); }
+  tip.textContent = "";
+  const done = () => { if (next === "heroes") { drawOrbit(); svg.classList.add("ready"); } };
+  if (instant || RM || !from.size) { for (const x of S) cur.set(x.id, { ...tgt.get(x.id) }); paint(); done(); return; }
+  cancelAnimationFrame(raf);
+  const t0 = performance.now(), DUR = 900, order = next === "time" ? si : ri;
+  const step = (now) => { let fin = true;
+    for (const x of S) { const k = Math.min(1, Math.max(0, (now - t0 - order.get(x.id) * 6) / DUR)); if (k < 1) fin = false; const q = ease(k), f = from.get(x.id), t = tgt.get(x.id), s = cur.get(x.id); for (const n of NUM) s[n] = f[n] + (t[n] - f[n]) * (FADE.has(n) ? fadeK(k, t[n] < f[n]) : q); }
+    paint(); if (!fin) raf = requestAnimationFrame(step); else done(); };
+  raf = requestAnimationFrame(step);
+}
+
+/* ---------- lens chrome ---------- */
+const COPY = {
+  order: ["Two orders. One story.", "Left is when each title came out, right is when it happens. Hover a line to follow it; the steep ones are where the watch-order arguments live."],
+  time: ["Story time, wound into a spiral.", "1943 sits at the centre, 2027 at the edge. Play the release order and the amber line shows how often the films jumped back in time."],
+  heroes: ["Who meets whom.", "Pick a hero. Their titles circle them, and the heroes they share a title with sit outside. Click an outer hero to travel to them."],
+};
+const LEG = {
+  order: `<span style="--c:var(--sto)"><i></i>Happens earlier than it came out</span><span style="--c:var(--rel)"><i></i>Happens later</span><span style="--c:var(--mute)"><i></i>About the same</span><span>Bold = essential</span>`,
+  time: `<span style="--c:var(--ink)"><i></i>Big bead = essential</span><span style="--c:var(--rel)"><i></i>Release order</span><span style="--c:var(--sto)"><i></i>Year in the story</span>`,
+  heroes: `<span style="--c:var(--mute)"><i></i>Outer dots: everything else, for scale</span><span>Number = titles shared</span>`,
+};
+const seg = document.getElementById("seg"), pill = seg.querySelector(".pill"), copy = document.getElementById("copy"), cap = document.getElementById("cap");
+const putPill = () => { const b = seg.querySelector("[aria-pressed=true]"); pill.style.left = b.offsetLeft + "px"; pill.style.width = b.offsetWidth + "px"; };
+function setLens(next, instant) {
+  stop(); lens = next;
+  seg.querySelectorAll("button").forEach((b) => b.setAttribute("aria-pressed", b.dataset.l === next)); putPill();
+  document.querySelectorAll(".ctl").forEach((c) => c.classList.toggle("on", c.dataset.for === next));
+  copy.classList.add("swap");
+  setTimeout(() => { copy.querySelector("h1").textContent = COPY[next][0]; copy.querySelector("p").textContent = COPY[next][1]; copy.classList.remove("swap"); }, instant ? 0 : 200);
+  document.getElementById("legend").innerHTML = LEG[next];
+  cap.innerHTML = next === "heroes" ? heroCap() : next === "time" ? `<span>Press play, or use the arrows, to walk the release order.</span>` : "";
+  rel.setAttribute("d", ""); halo.setAttribute("r", 0); k = -1;
+  history.replaceState(null, "", "#" + next + (next === "heroes" ? ":" + hero : ""));
+  morph(next, instant);
+}
+seg.addEventListener("click", (e) => { const b = e.target.closest("button"); if (b && b.dataset.l !== lens) setLens(b.dataset.l); });
+addEventListener("resize", putPill); document.fonts && document.fonts.ready.then(putPill);
+
+/* order: replay draws the curves in again */
+function drawIn() { if (RM) return; S.forEach((x) => { const p = E.get(x.id).p, L = p.getTotalLength(); if (!L) return; p.animate([{ strokeDasharray: L, strokeDashoffset: L }, { strokeDasharray: L, strokeDashoffset: 0 }], { duration: 750, delay: 120 + ri.get(x.id) * 20, easing: "cubic-bezier(.2,.7,.2,1)", fill: "backwards" }); }); }
+document.getElementById("redraw").onclick = drawIn;
+
+/* time: walk the release order */
+let k = -1, timer = null; const playB = document.getElementById("play");
+function show(i) {
+  k = Math.max(0, Math.min(R.length - 1, i)); const x = R[k], prev = R[k - 1], j = prev ? x.y - prev.y : 0, [px, py, a] = SP[si.get(x.id)];
+  rel.setAttribute("d", relPath(k)); halo.setAttribute("cx", px); halo.setAttribute("cy", py); halo.setAttribute("r", 14);
+  tip.setAttribute("x", px + (Math.cos(a) >= 0 ? 18 : -18)); tip.setAttribute("y", py - 12); tip.setAttribute("text-anchor", Math.cos(a) >= 0 ? "start" : "end"); tip.textContent = short(x.t);
+  cap.innerHTML = `<span><b>#${k + 1} · ${x.t}</b> · out ${x.d.slice(0, 4)}, happens in ${x.y} · ${!prev ? "where it all started" : j < -2 ? `<span class="j">jumps back ${-j} years</span>` : j > 2 ? `moves ${j} years forward` : "picks up where the last one left off"}</span>`;
+}
+function stop() { if (timer) { clearInterval(timer); timer = null; playB.textContent = "Play release order"; } }
+playB.onclick = () => { if (timer) return stop(); if (k >= R.length - 1) k = -1; playB.textContent = "Pause"; show(k + 1); timer = setInterval(() => { show(k + 1); if (k >= R.length - 1) stop(); }, 950); };
+document.getElementById("prev").onclick = () => { stop(); show(k - 1); };
+document.getElementById("next").onclick = () => { stop(); show(k + 1); };
+
+/* heroes */
+const heroesEl = document.getElementById("heroes");
+heroesEl.innerHTML = HEROES.map((h) => `<button class="btn hero-chip" style="--c:var(--h-${h.id})" data-h="${h.id}" aria-pressed="${h.id === hero}"><i></i>${h.name}</button>`).join("");
+function heroCap() { const h = HEROES.find((v) => v.id === hero), ts = S.filter((x) => h.t.includes(x.id)); return `<span><b>${h.name}'s path:</b> ${ts.map((x) => short(x.t)).join(" → ")}</span>`; }
+function pickHero(id) { if (id === hero && lens === "heroes") return; hero = id; heroesEl.querySelectorAll("button").forEach((b) => b.setAttribute("aria-pressed", b.dataset.h === id)); if (lens !== "heroes") return setLens("heroes"); cap.innerHTML = heroCap(); history.replaceState(null, "", "#heroes:" + id); morph("heroes"); }
+heroesEl.addEventListener("click", (e) => { const b = e.target.closest("button"); if (b) pickHero(b.dataset.h); });
+
+/* pointer: hover follows a title, click opens it */
+let pinned = null;
+function focus(id) {
+  if (lens === "order") { svg.classList.toggle("focus", !!id); E.forEach((e, k2) => e.g.classList.toggle("on", k2 === id)); }
+  else if (lens === "heroes") { Lheroes.classList.toggle("hov", !!id); linksG.querySelectorAll(".lk").forEach((l) => l.classList.toggle("on", l.dataset.t === id)); }
+  else if (lens === "time") { const sid = id || (k >= 0 ? R[k].id : null); if (!sid) { tip.textContent = ""; return; } const [px, py, a] = SP[si.get(sid)]; tip.setAttribute("x", px + (Math.cos(a) >= 0 ? 18 : -18)); tip.setAttribute("y", py - 12); tip.setAttribute("text-anchor", Math.cos(a) >= 0 ? "start" : "end"); tip.textContent = short(byId.get(sid).t); }
+}
+svg.addEventListener("pointerover", (e) => { const g = e.target.closest(".t"); focus(g ? g.dataset.id : pinned); });
+svg.addEventListener("pointerleave", () => focus(pinned));
+const act = (e) => { const co = e.target.closest(".co"); if (co) return pickHero(co.dataset.h); const g = e.target.closest(".t"); if (g && +g.getAttribute("opacity") > 0.7) { pinned = g.dataset.id; open(pinned); focus(pinned); } };
+svg.addEventListener("click", act);
+svg.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); act(e); } });
+
+/* card */
+const card = document.getElementById("card");
+function open(id) {
+  const x = byId.get(id), d = shift(x), hs = HEROES.filter((h) => h.t.includes(id));
+  card.innerHTML = `<div class="art" style="background:linear-gradient(150deg,${x.c[0]},${x.c[0]} 40%,${x.c[1]})"><b>${x.t}</b><button class="x" aria-label="Close"><svg width="12" height="12" viewBox="0 0 12 12"><path d="M1 1l10 10M11 1L1 11" stroke="#fff" stroke-width="2"/></svg></button></div>
+  <div class="bd"><div class="clocks"><div class="clock r"><small>Released</small><span>#${ri.get(id) + 1}</span><em>${x.d.slice(0, 4)}</em></div><div class="clock s"><small>Happens</small><span>#${si.get(id) + 1}</span><em>${x.y}</em></div></div>
+  <p class="hook">${x.hook}</p>
+  <dl class="facts"><dt>Type</dt><dd>${MW.kindLabel[x.k]}${x.ep ? ` · ${x.ep} episodes` : ""}</dd><dt>Runtime</dt><dd>${MW.hours(x.m)}</dd><dt>Priority</dt><dd>${MW.essLabel[x.e]}</dd><dt>After credits</dt><dd>${x.pc ? `${x.pc} scene${x.pc > 1 ? "s" : ""}, stay` : "Nothing, you can leave"}</dd>${Math.abs(d) > 1 ? `<dt>Order</dt><dd>${Math.abs(d)} places ${d > 0 ? "earlier" : "later"} in story order</dd>` : ""}</dl>
+  ${hs.length ? `<div class="who">${hs.map((h) => `<button class="btn hero-chip" style="--c:var(--h-${h.id})" data-h="${h.id}"><i></i>${h.name}</button>`).join("")}</div>` : ""}
+  <button class="watch">${x.soon ? "In cinemas Dec 18" : "Watch on " + MW.where(x, region())}</button></div>`;
+  card.classList.add("on");
+}
+function close() { card.classList.remove("on"); pinned = null; focus(null); }
+card.addEventListener("click", (e) => { if (e.target.closest(".x")) return close(); const h = e.target.closest(".hero-chip"); if (h) { close(); pickHero(h.dataset.h); } });
+addEventListener("keydown", (e) => { if (e.key === "Escape" && card.classList.contains("on")) close(); });
+document.getElementById("reg").addEventListener("change", () => { if (pinned) open(pinned); });
+
+/* start */
+const [h0, h1] = location.hash.slice(1).split(":");
+if (h1 && HEROES.some((h) => h.id === h1)) { hero = h1; heroesEl.querySelectorAll("button").forEach((b) => b.setAttribute("aria-pressed", b.dataset.h === hero)); }
+setLens(["order", "time", "heroes"].includes(h0) ? h0 : "order", true);
+if (lens === "order") drawIn();
+})();
+</script>
+</body>
+</html>
