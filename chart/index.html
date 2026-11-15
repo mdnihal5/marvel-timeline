@@ -6,7 +6,7 @@
 <title>MCU in order</title>
 <meta name="description" content="Every Marvel Studios film and series in release order, story order and by hero, with where to watch.">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=Newsreader:ital,opsz,wght@1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400&family=Newsreader:ital,opsz,wght@1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#f4f4f1;--panel:#ffffff;--line:#e2e2dd;--ink:#16181b;--sub:#686b70;--mute:#b8babd;--guide:#e7e7e2;--rel:#c47400;--sto:#0a87a2;--on-hero:#fff;--shadow:0 24px 60px -24px rgba(20,22,26,.28);
   --h-ironman:#df4339;--h-cap:#2f6fe6;--h-thor:#c28f00;--h-hulk:#2d9a52;--h-widow:#5b5f66;--h-spidey:#de3f88;--h-panther:#7a5ade;--h-wanda:#dd6716;--h-strange:#0f958c;--h-loki:#6c960f;
@@ -22,6 +22,9 @@ button,select{font:inherit;color:inherit;cursor:pointer}
 :focus-visible{outline:2px solid var(--sto);outline-offset:2px;border-radius:6px}
 
 /* header */
+#sbtn .sk{font:11px/1 "Geist Mono",ui-monospace,monospace;opacity:.6;border:1px solid currentColor;border-radius:4px;padding:2px 4px;margin-left:2px}@media (max-width:720px){#sbtn .sl,#sbtn .sk{display:none}}
+#sbtn{height:36px;display:inline-flex;align-items:center;gap:7px}
+
 .views{display:flex;gap:2px;margin-left:4px;padding-left:10px;border-left:1px solid var(--line)}.views a{padding:5px 9px;border-radius:7px;font-size:13px;font-weight:500;color:var(--sub);text-decoration:none;transition:color .2s,background .2s}.views a:hover{color:var(--ink)}.views a[aria-current=page]{color:var(--ink);background:color-mix(in srgb,var(--ink) 8%,transparent)}
 
 .top{position:sticky;top:0;z-index:10;display:flex;align-items:center;gap:20px;padding:14px 32px;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
@@ -124,6 +127,7 @@ footer{max-width:1180px;margin:auto;padding:28px 32px 40px;font-size:12px;color:
   <nav class="views" aria-label="Views"><a href="../galaxy/">Galaxy</a><a href="../chart/" aria-current="page">Chart</a><a href="../city/">City</a></nav>
   <div class="seg" id="seg" role="group" aria-label="View"><span class="pill" aria-hidden="true"></span><button data-l="order" aria-pressed="true">Order</button><button data-l="time" aria-pressed="false">Time</button><button data-l="heroes" aria-pressed="false">Heroes</button></div>
   <span class="sp"></span>
+  <button class="btn" id="sbtn" aria-label="Search, press /"><svg width="14" height="14" viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="6" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M13 13l5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span class="sl">Search</span><kbd class="sk">/</kbd></button>
   <select class="reg" id="reg" aria-label="Your country"><option>IN</option><option>US</option><option>UK</option></select>
   <button class="theme" id="theme" aria-label="Switch light or dark"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 1.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg></button>
 </header>
@@ -138,7 +142,7 @@ footer{max-width:1180px;margin:auto;padding:28px 32px 40px;font-size:12px;color:
 <div class="legend" id="legend"></div>
 <footer>Sample data for a design mock: dates, story order, cast and streaming availability are unverified. A fan guide, not affiliated with Marvel or Disney.</footer>
 <aside class="card" id="card" aria-live="polite" aria-label="Title details"></aside>
-<script src="../assets/data.js"></script>
+<script src="../assets/data.js"></script><script src="../assets/search.js"></script>
 <script>
 (() => {
 const S = TITLES, R = [...S].sort((a, b) => a.d.localeCompare(b.d));
@@ -336,10 +340,13 @@ addEventListener("keydown", (e) => { if (e.key === "Escape" && card.classList.co
 document.getElementById("reg").addEventListener("change", () => { if (pinned) open(pinned); });
 
 /* start */
-const [h0, h1] = location.hash.slice(1).split(":");
+const deep = location.hash, [h0, h1] = location.hash.slice(1).split(":");
 if (h1 && HEROES.some((h) => h.id === h1)) { hero = h1; heroesEl.querySelectorAll("button").forEach((b) => b.setAttribute("aria-pressed", b.dataset.h === hero)); }
 setLens(["order", "time", "heroes"].includes(h0) ? h0 : "order", true);
 if (lens === "order") drawIn();
+const showTitle = (id) => { pinned = id; open(id); focus(id); };
+MCUSearch.mount({ onTitle: showTitle, onHero: pickHero, button: document.getElementById("sbtn"), vars: { accent: "var(--sto)" } });
+if (deep.startsWith("#t=") && byId.has(deep.slice(3))) showTitle(deep.slice(3));
 })();
 </script>
 </body>

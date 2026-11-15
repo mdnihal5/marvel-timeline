@@ -16,7 +16,7 @@ canvas{display:block;position:fixed;inset:0;width:100%;height:100%;touch-action:
 .glass{background:var(--glass);backdrop-filter:blur(14px) saturate(1.2);-webkit-backdrop-filter:blur(14px) saturate(1.2);border:1px solid var(--line);box-shadow:0 8px 30px rgba(20,16,8,.12)}
 #bar{position:fixed;top:12px;left:12px;right:12px;display:flex;align-items:center;gap:8px;padding:6px 8px 6px 14px;border-radius:14px;max-width:560px}
 .views{display:flex;gap:2px;margin:0 auto 0 4px;padding-left:10px;border-left:1px solid var(--line)}.views a{padding:5px 9px;border-radius:7px;font-size:13px;font-weight:500;color:var(--mute);text-decoration:none}.views a:hover{color:var(--ink)}.views a[aria-current=page]{color:var(--ink);background:color-mix(in srgb,currentColor 9%,transparent)}
-#bar button{white-space:nowrap}#bar .sm{display:none}@media (max-width:600px){#bar h1 a{font-size:0}#bar h1 i{margin-right:0}#bar .lg{display:none}#bar .sm{display:inline}.views{padding-left:6px;margin-left:0}.views a{padding:5px 7px}}
+#bar button{white-space:nowrap}#sbtn{display:inline-flex;align-items:center;gap:6px}#sbtn .sk{font:11px/1 "Geist Mono",ui-monospace,monospace;opacity:.6;border:1px solid currentColor;border-radius:4px;padding:2px 4px;margin-left:2px}@media (max-width:720px){#sbtn .sl,#sbtn .sk{display:none}}#bar .sm{display:none}@media (max-width:600px){#bar h1 a{font-size:0}#bar h1 i{margin-right:0}#bar .lg{display:none}#bar .sm{display:inline}.views{padding-left:6px;margin-left:0}.views a{padding:5px 7px}}
 #bar h1{font-size:15px;margin:0;font-weight:650;letter-spacing:.01em}
 #bar h1 i{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--acc);margin-right:8px;vertical-align:1px}
 button{font:inherit;color:inherit;background:transparent;border:1px solid var(--line);border-radius:999px;padding:6px 12px;cursor:pointer}
@@ -43,13 +43,13 @@ button:hover{border-color:var(--acc)}button:focus-visible{outline:2px solid var(
 </head>
 <body>
 <canvas id="c" tabindex="0" aria-label="3D map of the MCU watch order. Use WASD or arrow keys to walk, or click a road or billboard."></canvas>
-<div id="bar" class="glass"><h1><a href="../" style="color:inherit;text-decoration:none"><i></i>MCU city</a></h1><nav class="views" aria-label="Views"><a href="../galaxy/">Galaxy</a><a href="../chart/">Chart</a><a href="../city/" aria-current="page">City</a></nav><button id="root"><span class="lg">Back to root</span><span class="sm">Start</span></button><button id="theme" aria-label="Toggle day and dusk">Dusk</button></div>
+<div id="bar" class="glass"><h1><a href="../" style="color:inherit;text-decoration:none"><i></i>MCU city</a></h1><nav class="views" aria-label="Views"><a href="../galaxy/">Galaxy</a><a href="../chart/">Chart</a><a href="../city/" aria-current="page">City</a></nav><button class="" id="sbtn" aria-label="Search, press /"><svg width="14" height="14" viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="6" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M13 13l5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span class="sl">Search</span><kbd class="sk">/</kbd></button><button id="root"><span class="lg">Back to root</span><span class="sm">Start</span></button><button id="theme" aria-label="Toggle day and dusk">Dusk</button></div>
 <div id="hint">WASD or arrows to walk · click a billboard or road · wheel to zoom</div>
 <div id="card" class="glass" hidden></div>
 <div id="foot">A fan guide, not affiliated with Marvel or Disney. Sample data.</div>
 <div id="fade"></div>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
-<script src="../assets/data.js"></script>
+<script src="../assets/data.js"></script><script src="../assets/search.js"></script>
 <script type="module">
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
@@ -399,6 +399,11 @@ canvas.addEventListener('click', e => {
   const h = ray.intersectObjects(panels, false)[0]; if (h) { walkToNode(h.object.userData.id); return; }
   if (ray.ray.intersectPlane(plane, hit)) walkTo(hit.x, hit.z, null);
 });
+// search: arrive at a title's plaza with a short fade (walking across town would take minutes)
+const jumpTo = id => { const n = nodes.get(id); if (!n) return; const go = () => { S.x = n.x; S.z = n.z; S.path = []; S.cardId = null; snapCam(); settle(); updateNear(); kick(); };
+  if (RM) return go(); const f = document.getElementById('fade'); f.classList.add('on'); setTimeout(() => { go(); f.classList.remove('on'); }, 230); };
+MCUSearch.mount({ onTitle: jumpTo, button: document.getElementById('sbtn'), vars: { bg: 'var(--glass)', sub: 'var(--mute)', accent: 'var(--acc)' } });
+if (location.hash.startsWith('#t=')) jumpTo(location.hash.slice(3));
 document.getElementById('root').onclick = () => {
   const go = () => { S.x = root.x; S.z = root.z; S.yaw = 0; S.path = []; S.cardId = null; snapCam(); settle(); updateNear(); kick(); };
   if (RM) return go();

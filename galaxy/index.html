@@ -25,6 +25,8 @@ a{color:inherit;text-decoration:none}
 .mono{font-family:"Geist Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums}
 
 /* chrome */
+#sbtn .sk{font:11px/1 "Geist Mono",ui-monospace,monospace;opacity:.6;border:1px solid currentColor;border-radius:4px;padding:2px 4px;margin-left:2px}@media (max-width:720px){#sbtn .sl,#sbtn .sk{display:none}}
+
 .views{display:flex;gap:2px;margin-left:4px;padding-left:10px;border-left:1px solid var(--line)}.views a{padding:5px 9px;border-radius:7px;font-size:13px;font-weight:500;color:var(--sub);text-decoration:none;transition:color .2s,background .2s}.views a:hover{color:var(--ink)}.views a[aria-current=page]{color:var(--ink);background:color-mix(in srgb,var(--ink) 8%,transparent)}
 
 .bar{position:fixed;z-index:5;top:16px;display:flex;align-items:center;gap:8px}
@@ -95,6 +97,7 @@ select.btn{appearance:none;padding:0 10px}
 <canvas id="g" aria-label="Graph of Marvel titles linked by shared heroes"></canvas>
 <div class="bar l"><a class="brand" href="../" title="Home"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><g fill="none" stroke="var(--faint)" stroke-width="1.2"><path d="M4 14L9 6l7 4M9 6l1 9"/></g><circle cx="4" cy="14" r="2.2" fill="var(--node)"/><circle cx="9" cy="6" r="2.6" fill="var(--accent)"/><circle cx="16" cy="10" r="2" fill="var(--node)"/><circle cx="10" cy="15" r="1.6" fill="var(--node)"/></svg><b>MCU graph</b><span id="count"></span></a><nav class="views" aria-label="Views"><a href="../galaxy/" aria-current="page">Galaxy</a><a href="../chart/">Chart</a><a href="../city/">City</a></nav></div>
 <div class="bar r">
+  <button class="btn" id="sbtn" aria-label="Search, press /"><svg width="14" height="14" viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="6" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M13 13l5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span class="sl">Search</span><kbd class="sk">/</kbd></button>
   <div class="seg" id="mode" role="group" aria-label="Mode"><button data-m="explore" aria-pressed="true">Explore</button><button data-m="travel" aria-pressed="false">Travel</button></div>
   <button class="btn" id="fbtn" aria-expanded="false" aria-controls="pop">Filters <span class="n" id="fn"></span></button>
   <select class="btn" id="reg" aria-label="Your country"><option>IN</option><option>US</option><option>UK</option></select>
@@ -113,7 +116,7 @@ select.btn{appearance:none;padding:0 10px}
 <aside class="card" id="card" aria-live="polite"></aside>
 <div class="tip" id="tip"></div>
 <div class="hint" id="hint">Drag to move · scroll to zoom · click a title</div>
-<script src="../assets/data.js"></script>
+<script src="../assets/data.js"></script><script src="../assets/search.js"></script>
 <script>
 (() => {
 const ALL = TITLES, REL = [...ALL].sort((a, b) => a.d.localeCompare(b.d));
@@ -318,7 +321,16 @@ addEventListener("keydown", (e) => { if (e.target.closest("select")) return;
 addEventListener("resize", resize); resize(); readTheme();
 V = ALL.slice(); vSet = new Set(V.map((x) => x.id)); rebuild();
 Object.assign(cam, tgt);
-if (location.hash === "#travel") setMode("travel");
+// search: fly to a title, or follow a hero
+const showTitle = (id) => { if (!vSet.has(id)) { F.heroes.clear(); F.types.clear(); F.ess = false; F.from = 2008; F.to = 2026; rebuild(); }
+  if (mode === "travel") return goTo(V.findIndex((x) => x.id === id));
+  const p = P.get(id), z = clampZ(Math.max(tgt.z, 1.6)); tgt.z = z; tgt.x = p.x + (W > 720 ? 90 / z : 0); tgt.y = p.y; openCard(id); };
+const showHero = (h) => { F.heroes.clear(); F.heroes.add(h); rebuild(); };
+MCUSearch.mount({ onTitle: showTitle, onHero: showHero, button: document.getElementById("sbtn") });
+const deep = location.hash;
+if (deep === "#travel") setMode("travel");
+else if (deep.startsWith("#t=") && byId.has(deep.slice(3))) { Object.assign(cam, tgt); showTitle(deep.slice(3)); }
+else if (deep.startsWith("#h=") && HEROES.some((h) => h.id === deep.slice(3))) showHero(deep.slice(3));
 })();
 </script>
 </body>
