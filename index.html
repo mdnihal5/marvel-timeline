@@ -2,86 +2,683 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 rx=%228%22 fill=%22%230c0e13%22/%3E%3Cpath d=%22M8 22l8-12 8 6M16 10l2 14%22 stroke=%22%235d6575%22 stroke-width=%221.6%22 fill=%22none%22/%3E%3Ccircle cx=%228%22 cy=%2222%22 r=%223%22 fill=%22%23c6cddb%22/%3E%3Ccircle cx=%2216%22 cy=%2210%22 r=%223.6%22 fill=%22%238aa9ff%22/%3E%3Ccircle cx=%2224%22 cy=%2216%22 r=%222.6%22 fill=%22%23c6cddb%22/%3E%3C/svg%3E">
 <title>Marvel timeline</title>
-<meta name="description" content="Every Marvel Studios film and series in release order and story order, with where to watch. Two ways to explore: a galaxy you travel through, and a chart.">
+<meta name="description" content="Every Marvel Studios film and series as a map: titles linked in watch order by the characters they share. Search, filter by character, and see the path from the first film to any title.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 rx=%228%22 fill=%22%230c0e13%22/%3E%3Cpath d=%22M8 22l8-12 8 6M16 10l2 14%22 stroke=%22%235d6575%22 stroke-width=%221.6%22 fill=%22none%22/%3E%3Ccircle cx=%228%22 cy=%2222%22 r=%223%22 fill=%22%23c6cddb%22/%3E%3Ccircle cx=%2216%22 cy=%2210%22 r=%223.6%22 fill=%22%238aa9ff%22/%3E%3Ccircle cx=%2224%22 cy=%2216%22 r=%222.6%22 fill=%22%23c6cddb%22/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#eef3fb;--ink:#101c38;--sub:#55617a;--line:rgba(16,28,56,.14);--panel:rgba(255,255,255,.7);--accent:#2f5fd0;--rel:#c47400;--sto:#0a87a2;--dot:16,28,56;--ease:cubic-bezier(.2,.7,.2,1)}
-@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#050914;--ink:#e6eeff;--sub:#93a3c4;--line:rgba(170,195,255,.16);--panel:rgba(10,18,40,.6);--accent:#8ab4ff;--rel:#ffb547;--sto:#5fd4e8;--dot:230,240,255}}
-:root[data-theme=dark]{--bg:#050914;--ink:#e6eeff;--sub:#93a3c4;--line:rgba(170,195,255,.16);--panel:rgba(10,18,40,.6);--accent:#8ab4ff;--rel:#ffb547;--sto:#5fd4e8;--dot:230,240,255}
+:root{--bg:#f6f7f9;--panel:#ffffff;--ink:#14171c;--sub:#6b7280;--faint:#9aa1ad;--line:#e4e7ec;--node:#3a4150;--link:#c9cfd9;--accent:#3d63dd;--accent-soft:rgba(61,99,221,.12);--path:#14171c;--rel:#c47400;--sto:#0a87a2;--star:20,30,60;--shadow:0 12px 40px -16px rgba(20,24,32,.22);
+  --h-ironman:#df4339;--h-cap:#2f6fe6;--h-thor:#c28f00;--h-hulk:#2d9a52;--h-widow:#5b5f66;--h-spidey:#de3f88;--h-panther:#7a5ade;--h-wanda:#dd6716;--h-strange:#0f958c;--h-loki:#6c960f;
+  --h-starlord:#b45309;--h-antman:#9f1239;--h-marvel:#1d4ed8;--h-fury:#374151;--h-bucky:#0e7490;--h-hawkeye:#7e22ce}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0c0e13;--panel:#151820;--ink:#e8ebf1;--sub:#9098a8;--faint:#5d6575;--line:#232834;--node:#c6cddb;--link:#2e3647;--accent:#8aa9ff;--accent-soft:rgba(138,169,255,.14);--path:#f4f6fb;--rel:#ffb547;--sto:#5fd4e8;--star:200,215,255;--shadow:0 16px 48px -16px rgba(0,0,0,.6);
+  --h-ironman:#ff5a4e;--h-cap:#4f8dff;--h-thor:#ffd166;--h-hulk:#57d27a;--h-widow:#e8e6e1;--h-spidey:#ff6fb1;--h-panther:#a98bff;--h-wanda:#ff8f3d;--h-strange:#3fd0c9;--h-loki:#b5e35a;
+  --h-starlord:#f6ad55;--h-antman:#fb7185;--h-marvel:#93c5fd;--h-fury:#cbd5e1;--h-bucky:#67e8f9;--h-hawkeye:#d8b4fe}}
+:root[data-theme=dark]{--bg:#0c0e13;--panel:#151820;--ink:#e8ebf1;--sub:#9098a8;--faint:#5d6575;--line:#232834;--node:#c6cddb;--link:#2e3647;--accent:#8aa9ff;--accent-soft:rgba(138,169,255,.14);--path:#f4f6fb;--rel:#ffb547;--sto:#5fd4e8;--star:200,215,255;--shadow:0 16px 48px -16px rgba(0,0,0,.6);
+  --h-ironman:#ff5a4e;--h-cap:#4f8dff;--h-thor:#ffd166;--h-hulk:#57d27a;--h-widow:#e8e6e1;--h-spidey:#ff6fb1;--h-panther:#a98bff;--h-wanda:#ff8f3d;--h-strange:#3fd0c9;--h-loki:#b5e35a;
+  --h-starlord:#f6ad55;--h-antman:#fb7185;--h-marvel:#93c5fd;--h-fury:#cbd5e1;--h-bucky:#67e8f9;--h-hawkeye:#d8b4fe}
 *{box-sizing:border-box}
-html,body{min-height:100%;background:var(--bg)}
-body{margin:0;color:var(--ink);font:15px/1.55 "Geist",system-ui,sans-serif;-webkit-font-smoothing:antialiased;
-  background:radial-gradient(60% 50% at 70% 20%,color-mix(in srgb,var(--accent) 22%,transparent),transparent 70%),radial-gradient(50% 45% at 15% 85%,color-mix(in srgb,#7a5ade 18%,transparent),transparent 70%),var(--bg);background-attachment:fixed}
-body::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.7;
-  background-image:radial-gradient(1px 1px at 12% 18%,rgba(var(--dot),.8),transparent),radial-gradient(1px 1px at 72% 12%,rgba(var(--dot),.6),transparent),radial-gradient(1.5px 1.5px at 40% 64%,rgba(var(--dot),.7),transparent),radial-gradient(1px 1px at 88% 72%,rgba(var(--dot),.5),transparent),radial-gradient(1px 1px at 22% 82%,rgba(var(--dot),.6),transparent),radial-gradient(1px 1px at 56% 32%,rgba(var(--dot),.5),transparent),radial-gradient(1.5px 1.5px at 92% 38%,rgba(var(--dot),.7),transparent);
-  background-size:420px 420px;animation:drift 120s linear infinite}
-@keyframes drift{to{background-position:420px 210px}}
-a{color:inherit}
-:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:8px}
-header{max-width:1080px;margin:auto;padding:26px 24px 0;display:flex;align-items:center;gap:12px}
-.logo{display:flex;align-items:center;gap:9px;font-weight:600;font-size:14px}
-.sp{flex:1}
-.search{height:36px;display:inline-flex;align-items:center;gap:8px;padding:0 12px;border-radius:999px;border:1px solid var(--line);background:var(--panel);color:var(--sub);font:inherit;font-size:13.5px;cursor:pointer;margin-right:8px;min-width:200px}.search:hover{color:var(--ink)}@media (max-width:720px){.search{min-width:0;padding:0 11px}}.search .sl{flex:1;text-align:left}
-#sbtn .sk{font:11px/1 "Geist Mono",ui-monospace,monospace;opacity:.6;border:1px solid currentColor;border-radius:4px;padding:2px 4px;margin-left:2px}@media (max-width:720px){#sbtn .sl,#sbtn .sk{display:none}}
-.theme{width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:var(--panel);display:grid;place-items:center;color:var(--ink);cursor:pointer}
-main{max-width:1080px;margin:auto;padding:9vh 24px 40px}
-.k{font-size:13px;font-weight:500;color:var(--accent)}
-h1{margin:10px 0 0;font-size:clamp(36px,5.2vw,64px);line-height:1.04;font-weight:600;letter-spacing:-.035em;max-width:14ch}
-.lede{font-size:17px;line-height:1.55;color:var(--sub);max-width:48ch;margin:16px 0 0}
-.ways{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:48px}
-.way{position:relative;display:block;text-decoration:none;padding:22px;border-radius:16px;border:1px solid var(--line);background:var(--panel);backdrop-filter:blur(14px);overflow:hidden;transition:transform .35s var(--ease),border-color .3s}
-.way:hover{transform:translateY(-4px);border-color:var(--accent)}
-.way svg.art{display:block;width:100%;height:150px;margin-bottom:18px}
-.way h2{margin:0;font-size:18px;font-weight:600;letter-spacing:-.01em}
-.way p{margin:6px 0 0;color:var(--sub);font-size:14px;max-width:40ch}
-.way .go{margin-top:14px;display:inline-flex;align-items:center;gap:8px;font-weight:500;font-size:14px;color:var(--accent)}
-.way .go span{transition:transform .3s var(--ease)}.way:hover .go span{transform:translateX(4px)}
-.orbit{transform-origin:150px 75px;animation:turn 50s linear infinite}
-@keyframes turn{to{transform:rotate(360deg)}}
-.tw{animation:tw 3s ease-in-out infinite}.tw:nth-child(2n){animation-delay:-1.4s}.tw:nth-child(3n){animation-delay:-2.2s}
-@keyframes tw{50%{opacity:.35}}
-.draw{stroke-dasharray:420;stroke-dashoffset:420;animation:draw 2.4s .3s var(--ease) forwards}
-.draw:nth-of-type(2){animation-delay:.5s}.draw:nth-of-type(3){animation-delay:.7s}
-@keyframes draw{to{stroke-dashoffset:0}}
-footer{max-width:1080px;margin:auto;padding:20px 24px 40px;font-size:12px;color:var(--sub)}
-@media (max-width:980px){.ways{grid-template-columns:1fr 1fr}}@media (max-width:640px){.ways{grid-template-columns:1fr}main{padding-top:6vh}}
-@media (prefers-reduced-motion:reduce){*{animation:none!important}.draw{stroke-dashoffset:0}}
+html,body{height:100%;margin:0;overflow:hidden;background:var(--bg)}
+body{color:var(--ink);font:14px/1.45 "Geist",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+button,select{font:inherit;color:inherit;cursor:pointer}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:6px}
+#g{position:fixed;inset:0;width:100vw;height:100vh;display:block;touch-action:none;cursor:grab}
+#g.drag{cursor:grabbing}#g.pt{cursor:pointer}
+.mono{font-family:"Geist Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums}
+
+/* chrome */
+.bar{position:fixed;z-index:5;top:16px;display:flex;align-items:center;gap:8px}
+.bar.l{left:18px}.bar.r{right:18px}
+.brand{display:flex;align-items:center;gap:10px;padding:6px 4px}
+.brand b{font-weight:600;font-size:14px}.brand span{color:var(--sub);font-size:13px}
+.seg{display:flex;background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:2px}
+.seg button{border:0;background:none;padding:5px 11px;border-radius:7px;font-size:13px;font-weight:500;color:var(--sub);transition:background .2s,color .2s;display:inline-flex;align-items:center;gap:6px}
+.seg button[aria-pressed=true]{background:var(--accent-soft);color:var(--ink)}
+.btn{height:32px;padding:0 11px;border:1px solid var(--line);background:var(--panel);border-radius:9px;font-size:13px;font-weight:500;color:var(--ink);display:inline-flex;align-items:center;gap:6px;transition:border-color .2s}
+.btn:hover{border-color:var(--faint)}
+.btn .n{font-family:"Geist Mono";font-size:11px;color:var(--accent)}
+.btn.ic{width:32px;padding:0;justify-content:center}
+.btn kbd{font:11px/1 "Geist Mono",monospace;color:var(--faint);border:1px solid var(--line);border-radius:4px;padding:2px 4px}
+select.btn{appearance:none;padding:0 10px}
+.zoom{position:fixed;z-index:5;left:18px;bottom:18px;display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.zoom button{width:32px;height:32px;border:0;background:none;font-size:16px;color:var(--sub)}
+.zoom button+button{border-top:1px solid var(--line)}
+.zoom button:hover{color:var(--ink)}
+.legend{position:fixed;z-index:4;left:62px;bottom:20px;display:flex;gap:14px;font-size:12px;color:var(--sub);pointer-events:none}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{display:inline-block;width:18px;height:2px;border-radius:2px;background:var(--c)}
+
+/* travel bar */
+.travel{position:fixed;z-index:5;left:50%;bottom:18px;transform:translate(-50%,0);display:flex;align-items:center;gap:6px;padding:6px;background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);transition:opacity .25s,transform .3s cubic-bezier(.2,.7,.2,1)}
+.travel.off{opacity:0;transform:translate(-50%,12px);pointer-events:none}
+.travel .now{min-width:260px;max-width:360px;padding:0 8px;overflow:hidden}
+.travel .now small{display:block;color:var(--sub);font-size:11.5px}
+.travel .now b{display:block;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.travel .meter{height:2px;background:var(--line);border-radius:2px;margin-top:5px;overflow:hidden}.travel .meter i{display:block;height:100%;background:var(--accent);transition:width .3s}
+
+/* filters */
+.pop{position:fixed;z-index:6;top:58px;right:18px;width:min(380px,calc(100vw - 36px));max-height:calc(100vh - 76px);overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);padding:14px;
+  opacity:0;transform:translateY(-4px);visibility:hidden;transition:opacity .2s,transform .2s,visibility 0s .2s}
+.pop.on{opacity:1;transform:none;visibility:visible;transition:opacity .2s,transform .2s}
+.pop h3{margin:0 0 7px;font-size:12px;font-weight:500;color:var(--sub);display:flex;justify-content:space-between}
+.pop h3 button{border:0;background:none;padding:0;color:var(--accent);font-size:12px}
+.pop section{margin-bottom:14px}
+.chips{display:flex;flex-wrap:wrap;gap:5px}
+.chip{border:1px solid var(--line);background:none;border-radius:7px;padding:4px 9px;font-size:12.5px;color:var(--sub);display:inline-flex;align-items:center;gap:6px;transition:all .15s}
+.chip i{width:7px;height:7px;border-radius:50%;background:var(--c,var(--faint))}
+.chip small{font-family:"Geist Mono";font-size:10.5px;color:var(--faint)}
+.chip:hover{color:var(--ink)}
+.chip[aria-pressed=true]{border-color:var(--c,var(--accent));color:var(--ink);background:var(--accent-soft)}
+.yrs{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--sub)}
+.yrs select{border:1px solid var(--line);background:var(--panel);border-radius:7px;padding:4px 6px}
+.pop .sum{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);padding-top:10px;font-size:12.5px;color:var(--sub)}
+.link{border:0;background:none;padding:0;color:var(--accent);font-size:12.5px}
+
+/* card */
+.card{position:fixed;z-index:4;right:18px;top:64px;width:min(330px,calc(100vw - 36px));max-height:calc(100vh - 150px);overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:16px 16px 14px;
+  opacity:0;transform:translateX(8px);visibility:hidden;transition:opacity .22s,transform .3s cubic-bezier(.2,.7,.2,1),visibility 0s .22s}
+.card.on{opacity:1;transform:none;visibility:visible;transition:opacity .22s,transform .3s cubic-bezier(.2,.7,.2,1)}
+.card .x{position:absolute;top:10px;right:10px;width:26px;height:26px;border:0;background:none;color:var(--faint);border-radius:6px}
+.card .x:hover{background:var(--accent-soft);color:var(--ink)}
+.card .k{font-size:12px;color:var(--sub);display:flex;gap:8px;align-items:center}
+.card .k i{width:8px;height:8px;border-radius:50%}
+.card h2{margin:6px 28px 4px 0;font-size:19px;line-height:1.2;font-weight:600;letter-spacing:-.01em}
+.card p{margin:0 0 12px;color:var(--sub);font-size:13.5px}
+.card dl{display:grid;grid-template-columns:auto 1fr;gap:5px 14px;margin:0 0 12px;font-size:13px}
+.card dt{color:var(--sub)}.card dd{margin:0}
+.card .who{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px}
+.card h4{margin:12px 0 6px;font-size:12px;font-weight:500;color:var(--sub);display:flex;justify-content:space-between}
+.card h4 span{font-family:"Geist Mono";font-size:11px}
+.steps{display:flex;flex-wrap:wrap;align-items:center;gap:4px;font-size:12.5px}
+.steps button{border:1px solid var(--line);background:none;border-radius:6px;padding:3px 7px;color:var(--ink);font-size:12.5px;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.steps button:hover{border-color:var(--path)}
+.steps em{font-style:normal;color:var(--faint)}
+.steps .here{border-color:var(--path);color:var(--path)}
+.route{list-style:none;margin:0;padding:0;max-height:168px;overflow:auto;border:1px solid var(--line);border-radius:9px}
+.route li+li{border-top:1px solid var(--line)}
+.route button{display:flex;gap:10px;width:100%;border:0;background:none;padding:6px 9px;text-align:left;font-size:12.5px;color:var(--ink)}
+.route button:hover{background:var(--accent-soft)}
+.route .mono{color:var(--faint);min-width:18px;text-align:right}
+.route .here{font-weight:600}.route .here .mono{color:var(--ink)}
+.card .watch{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);padding-top:11px;margin-top:12px;font-size:13px}
+.card .watch b{font-weight:600}
+.card .watch span{color:var(--sub)}
+.tip{position:fixed;z-index:7;pointer-events:none;background:var(--panel);border:1px solid var(--line);border-radius:7px;padding:4px 8px;font-size:12.5px;box-shadow:var(--shadow);transform:translate(12px,12px);opacity:0;transition:opacity .12s}
+.tip.on{opacity:1}
+.hint{position:fixed;z-index:3;left:50%;bottom:22px;transform:translateX(-50%);font-size:12.5px;color:var(--faint);transition:opacity .4s;pointer-events:none;white-space:nowrap}
+footer{position:fixed;z-index:3;right:18px;bottom:16px;font-size:11px;color:var(--faint);max-width:300px;text-align:right;pointer-events:none}
+@media (max-width:860px){.bar.l .brand span{display:none}.bar.r{top:58px;left:18px;right:auto;flex-wrap:wrap}.card{top:auto;bottom:70px;right:12px;left:12px;width:auto;max-height:46vh}.travel .now{min-width:0;width:40vw}.zoom,.legend,footer{display:none}.hide-sm{display:none!important}.pop{top:100px}.hint{white-space:normal;text-align:center;width:80vw}}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important}}
 </style>
 </head>
 <body>
-<header><div class="logo"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12m-2 0a2 2 0 1 0 4 0a2 2 0 1 0-4 0M12 3c5 0 8 4 6 8M21 12c0 5-4 8-8 6M12 21c-5 0-8-4-6-8M3 12c0-5 4-8 8-6" fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round"/></svg>Marvel timeline</div><span class="sp"></span>
-<button class="search" id="sbtn" aria-label="Search, press /"><svg width="14" height="14" viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="6" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M13 13l5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span class="sl">Search</span><kbd class="sk">/</kbd></button>
-<button class="theme" id="theme" aria-label="Switch light or dark"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 1.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg></button></header>
-<main>
-  <div class="k">59 films and series · Marvel Studios</div>
-  <h1>Every Marvel title, in the order you want.</h1>
-  <p class="lede">Release order or story order, who meets whom, and where to stream each one. Three ways to explore the same 59 titles.</p>
-  <div class="ways">
-    <a class="way" href="galaxy/">
-      <svg class="art" viewBox="0 0 300 150" aria-hidden="true"><g class="orbit"><ellipse cx="150" cy="75" rx="120" ry="52" fill="none" stroke="var(--line)"/><ellipse cx="150" cy="75" rx="70" ry="30" fill="none" stroke="var(--line)"/></g>
-        <path d="M60 90 L110 52 L150 75 L205 40 L250 70" fill="none" stroke="var(--sto)" stroke-width="1.6" stroke-dasharray="3 5"/>
-        <g fill="var(--ink)"><circle class="tw" cx="60" cy="90" r="3"/><circle class="tw" cx="110" cy="52" r="4"/><circle cx="150" cy="75" r="5" fill="var(--rel)"/><circle class="tw" cx="205" cy="40" r="3.5"/><circle class="tw" cx="250" cy="70" r="3"/><circle class="tw" cx="90" cy="30" r="1.5"/><circle class="tw" cx="230" cy="118" r="1.5"/><circle class="tw" cx="40" cy="40" r="1.2"/></g></svg>
-      <h2>Galaxy</h2><p>Titles linked by the heroes they share. Explore freely or travel through the order, with filters for hero, year and type.</p><div class="go">Explore <span>→</span></div></a>
-    <a class="way" href="chart/">
-      <svg class="art" viewBox="0 0 300 150" aria-hidden="true"><g fill="none" stroke-width="1.8"><path class="draw" d="M70 20 C150 20 150 120 230 120" stroke="var(--sto)"/><path class="draw" d="M70 70 C150 70 150 30 230 30" stroke="var(--rel)"/><path class="draw" d="M70 120 C150 120 150 75 230 75" stroke="var(--sub)"/></g>
-        <g fill="var(--sub)"><rect x="20" y="17" width="44" height="6" rx="3"/><rect x="28" y="67" width="36" height="6" rx="3"/><rect x="14" y="117" width="50" height="6" rx="3"/><rect x="236" y="117" width="40" height="6" rx="3"/><rect x="236" y="27" width="48" height="6" rx="3"/><rect x="236" y="72" width="34" height="6" rx="3"/></g></svg>
-      <h2>Chart</h2><p>Release order against story order, a spiral of story time, and each hero's circle of titles, in one view.</p><div class="go">Open <span>→</span></div></a>
-    <a class="way" href="city/">
-      <svg class="art" viewBox="0 0 300 150" aria-hidden="true"><path d="M20 118 L150 64 L280 118" fill="none" stroke="var(--line)" stroke-width="10" stroke-linecap="round"/><path d="M150 64 L150 20" stroke="var(--line)" stroke-width="10" stroke-linecap="round"/>
-        <g fill="var(--panel)" stroke="var(--sub)" stroke-width="1.4"><path d="M60 92h28v-20l-14-10-14 10z"/><path d="M196 92h34v-24l-17-12-17 12z"/><path d="M120 52h20V34l-10-8-10 8z"/></g>
-        <g fill="var(--sto)"><circle class="tw" cx="104" cy="96" r="5"/><circle class="tw" cx="176" cy="96" r="5"/></g><rect x="141" y="70" width="18" height="12" rx="2" fill="var(--rel)"/><path d="M150 82v10" stroke="var(--sub)" stroke-width="1.4"/></svg>
-      <h2>City</h2><p>Walk a little town where roads are the watch order and billboards are the titles. Start at the first film and pick your road.</p><div class="go">Walk in <span>→</span></div></a>
-  </div>
-</main>
-<footer>A fan guide, not affiliated with Marvel or Disney. Dates, order and streaming availability are a sample and may be out of date.</footer>
-<script src="assets/data.js"></script><script src="assets/search.js"></script>
+<canvas id="g" aria-label="Map of Marvel titles linked in watch order by the characters they share"></canvas>
+<div class="bar l"><a class="brand" href="./" title="Reset"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><g fill="none" stroke="var(--faint)" stroke-width="1.2"><path d="M4 14L9 6l7 4M9 6l1 9"/></g><circle cx="4" cy="14" r="2.2" fill="var(--node)"/><circle cx="9" cy="6" r="2.6" fill="var(--accent)"/><circle cx="16" cy="10" r="2" fill="var(--node)"/><circle cx="10" cy="15" r="1.6" fill="var(--node)"/></svg><b>Marvel timeline</b><span id="count"></span></a></div>
+<div class="bar r">
+  <button class="btn" id="sbtn" aria-label="Search, press /"><svg width="14" height="14" viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="6" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M13 13l5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span class="hide-sm">Search</span><kbd class="hide-sm">/</kbd></button>
+  <div class="seg" id="layout" role="group" aria-label="Layout"><button data-l="graph" aria-pressed="true" title="Force graph">Graph</button><button data-l="map" aria-pressed="false" title="Mind map, left to right in watch order">Map</button></div>
+  <div class="seg" id="mode" role="group" aria-label="Mode"><button data-m="explore" aria-pressed="true">Explore</button><button data-m="travel" aria-pressed="false">Travel</button></div>
+  <button class="btn" id="fbtn" aria-expanded="false" aria-controls="pop">Filters <span class="n" id="fn"></span></button>
+  <select class="btn" id="reg" aria-label="Your country"><option>IN</option><option>US</option><option>UK</option></select>
+  <button class="btn ic" id="theme" aria-label="Switch light or dark"><svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8 1.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg></button>
+</div>
+<div class="pop" id="pop" role="dialog" aria-label="Filters">
+  <section><h3>Characters <button id="fHall">clear</button></h3><div class="chips" id="fH"></div></section>
+  <section><h3>Phase</h3><div class="chips" id="fP"></div></section>
+  <section><h3>Released</h3><div class="yrs"><select id="fFrom" aria-label="From year"></select>to<select id="fTo" aria-label="To year"></select></div></section>
+  <section><h3>Type</h3><div class="chips" id="fT"></div></section>
+  <section><h3>Order when travelling</h3><div class="chips" id="fO"><button class="chip" data-o="story" aria-pressed="true">Story</button><button class="chip" data-o="release" aria-pressed="false">Release</button></div></section>
+  <section><div class="chips"><button class="chip" id="fE" aria-pressed="false">Essentials only</button></div></section>
+  <div class="sum"><span id="fsum"></span><button class="link" id="fclear">Clear all</button></div>
+</div>
+<div class="zoom" aria-label="Zoom"><button id="zin" aria-label="Zoom in">+</button><button id="zout" aria-label="Zoom out">−</button><button id="zfit" aria-label="Fit everything" title="Fit everything"><svg width="13" height="13" viewBox="0 0 14 14" aria-hidden="true"><path d="M1 5V1h4M9 1h4v4M13 9v4H9M5 13H1V9" fill="none" stroke="currentColor" stroke-width="1.4"/></svg></button></div>
+<div class="legend" aria-hidden="true"><span><i style="background:linear-gradient(90deg,var(--h-ironman),var(--h-cap),var(--h-thor),var(--h-spidey),var(--h-panther))"></i>colour = character, earlier → later</span><span><i style="height:3px;background:linear-gradient(90deg,var(--h-spidey) 0 25%,var(--h-strange) 25% 50%,var(--h-thor) 50% 75%,var(--h-panther) 75%)"></i>route: every title up to the one you picked</span></div>
+<div class="travel off" id="travel"><button class="btn ic" id="prev" aria-label="Previous">←</button><div class="now"><small id="tk"></small><b id="tt"></b><div class="meter"><i id="tm"></i></div></div><button class="btn ic" id="next" aria-label="Next">→</button><button class="btn" id="treset">Back to start</button></div>
+<aside class="card" id="card" aria-live="polite"></aside>
+<div class="tip" id="tip"></div>
+<div class="hint" id="hint">Drag to move · scroll to zoom · click a title · press / to search</div>
+<footer>Fan guide, not affiliated with Marvel or Disney. Sample data: dates, order, cast and streaming may be wrong.</footer>
 <script>
-MCUSearch.mount({ onTitle: (id) => (location.href = "galaxy/#t=" + id), onHero: (id) => (location.href = "galaxy/#h=" + id), button: document.getElementById("sbtn"), vars: { bg: "var(--bg)" } });
-(() => { const r = document.documentElement; try { const t = localStorage.getItem("mcu-theme"); if (t) r.dataset.theme = t; } catch {}
-  document.getElementById("theme").onclick = () => { const dark = r.dataset.theme ? r.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches; r.dataset.theme = dark ? "light" : "dark"; try { localStorage.setItem("mcu-theme", r.dataset.theme); } catch {} }; })();
+// SAMPLE DATA for the design mocks only. Dates, runtimes, story order and streaming availability are
+// from memory plus one web check (2026-11-15) and are NOT verified. The real build pulls availability per
+// country from TMDB's watch-provider data (JustWatch) and needs a checked order.
+// Array order = story (in-universe) order. kind: film | series | special | short | anim
+// e: 1 essential, 2 recommended, 3 optional. pc: post-credit scenes. c: two colours for the generated key art.
+window.TITLES = [
+  { id: "catfa", t: "Captain America: The First Avenger", k: "film", d: "2011-07-22", y: 1943, ph: 1, m: 124, e: 1, pc: 1, c: ["#3b5b8c", "#c9a66b"], hook: "A skinny kid from Brooklyn volunteers for an experiment and ends up in the ice." },
+  { id: "cm", t: "Captain Marvel", k: "film", d: "2019-03-08", y: 1995, ph: 3, m: 123, e: 2, pc: 2, c: ["#1f3a7a", "#e2a33a"], hook: "A Kree soldier crash-lands in 1995 and finds out who she was." },
+  { id: "im", t: "Iron Man", k: "film", d: "2008-05-02", y: 2008, ph: 1, m: 126, e: 1, pc: 1, c: ["#9e1b1b", "#e8b33d"], hook: "A weapons dealer builds a suit in a cave. Everything starts here." },
+  { id: "im2", t: "Iron Man 2", k: "film", d: "2010-05-07", y: 2010, ph: 1, m: 124, e: 3, pc: 1, c: ["#7d1b1b", "#b9b9c0"], hook: "Tony is dying from the thing keeping him alive." },
+  { id: "hulk", t: "The Incredible Hulk", k: "film", d: "2008-06-13", y: 2010, ph: 1, m: 112, e: 3, pc: 1, c: ["#2f5d2a", "#8fbf4a"], w: "rent", hook: "Bruce Banner on the run. Later films barely mention it." },
+  { id: "thor", t: "Thor", k: "film", d: "2011-05-06", y: 2010, ph: 1, m: 115, e: 2, pc: 1, c: ["#3d4f7a", "#d9c27a"], hook: "A god loses his hammer in New Mexico." },
+  { id: "avg", t: "The Avengers", k: "film", d: "2012-05-04", y: 2012, ph: 1, m: 143, e: 1, pc: 2, c: ["#2a3550", "#d64b2a"], hook: "Six heroes, one city, one alien army." },
+  { id: "tdw", t: "Thor: The Dark World", k: "film", d: "2013-11-08", y: 2013, ph: 2, m: 112, e: 3, pc: 2, c: ["#2b2633", "#b0412e"], hook: "Introduces the Reality Stone. Watch it for that." },
+  { id: "im3", t: "Iron Man 3", k: "film", d: "2013-05-03", y: 2013, ph: 2, m: 130, e: 2, pc: 1, c: ["#8a2d14", "#f0c14a"], hook: "Tony after New York: no sleep, too many suits." },
+  { id: "tws", t: "Captain America: The Winter Soldier", k: "film", d: "2014-04-04", y: 2014, ph: 2, m: 136, e: 1, pc: 2, c: ["#283447", "#9aa7b8"], hook: "S.H.I.E.L.D. is not what it seems." },
+  { id: "gotg", t: "Guardians of the Galaxy", k: "film", d: "2014-08-01", y: 2014, ph: 2, m: 121, e: 1, pc: 1, c: ["#3a1f5c", "#f08a3c"], hook: "Five misfits and an orb everyone wants." },
+  { id: "gotg2", t: "Guardians of the Galaxy Vol. 2", k: "film", d: "2017-05-05", y: 2014, ph: 3, m: 136, e: 2, pc: 5, c: ["#5a2a6e", "#ff9fb3"], hook: "Peter meets his father. Five post-credit scenes." },
+  { id: "groot", t: "I Am Groot", k: "short", d: "2022-08-10", y: 2014, ph: 4, m: 20, ep: 5, e: 3, pc: 0, c: ["#3c5a2a", "#c3d36b"], hook: "Tiny Groot shorts. Pure fun, skip freely." },
+  { id: "aou", t: "Avengers: Age of Ultron", k: "film", d: "2015-05-01", y: 2015, ph: 2, m: 141, e: 1, pc: 1, c: ["#3c3f46", "#c23a2b"], hook: "Tony builds a peacekeeper. It disagrees." },
+  { id: "am", t: "Ant-Man", k: "film", d: "2015-07-17", y: 2015, ph: 2, m: 117, e: 2, pc: 2, c: ["#5b1e1e", "#bfbfbf"], hook: "A thief shrinks. The quantum realm opens." },
+  { id: "cw", t: "Captain America: Civil War", k: "film", d: "2016-05-06", y: 2016, ph: 3, m: 147, e: 1, pc: 2, c: ["#2c3a55", "#a83232"], hook: "The Avengers split over who gets to control them." },
+  { id: "bw", t: "Black Widow", k: "film", d: "2021-07-09", y: 2016, ph: 4, m: 134, e: 2, pc: 1, c: ["#1d1d22", "#c8313a"], hook: "Natasha on the run, and the family she left." },
+  { id: "bp", t: "Black Panther", k: "film", d: "2018-02-16", y: 2016, ph: 3, m: 134, e: 1, pc: 2, c: ["#24133a", "#9b6cd6"], hook: "A new king, and a cousin with a claim." },
+  { id: "hc", t: "Spider-Man: Homecoming", k: "film", d: "2017-07-07", y: 2016, ph: 3, m: 133, e: 2, pc: 2, c: ["#b3202a", "#2a4fa8"], w: "sony", hook: "Peter wants to be an Avenger. He has homework." },
+  { id: "ds", t: "Doctor Strange", k: "film", d: "2016-11-04", y: 2016, ph: 3, m: 115, e: 2, pc: 2, c: ["#2a2a5c", "#e07b28"], hook: "A surgeon loses his hands and finds magic." },
+  { id: "rag", t: "Thor: Ragnarok", k: "film", d: "2017-11-03", y: 2017, ph: 3, m: 130, e: 1, pc: 2, c: ["#4a1f6e", "#ffb02e"], hook: "Asgard ends. Thor gets a haircut and a comedy." },
+  { id: "amw", t: "Ant-Man and the Wasp", k: "film", d: "2018-07-06", y: 2018, ph: 3, m: 118, e: 3, pc: 2, c: ["#5b1e1e", "#e2c14a"], hook: "Its mid-credit scene matters more than the film." },
+  { id: "iw", t: "Avengers: Infinity War", k: "film", d: "2018-04-27", y: 2018, ph: 3, m: 149, e: 1, pc: 1, c: ["#3b2a52", "#d9a23a"], hook: "Thanos comes for the stones. Half of everyone goes." },
+  { id: "eg", t: "Avengers: Endgame", k: "film", d: "2019-04-26", y: 2023, ph: 3, m: 181, e: 1, pc: 0, c: ["#2a1d3d", "#c9a23e"], hook: "Five years later. One more try." },
+  { id: "loki1", t: "Loki — Season 1", k: "series", d: "2021-06-09", y: 2012, ph: 4, m: 300, ep: 6, e: 1, pc: 0, c: ["#1f4a3a", "#d8b44a"], hook: "The TVA catches a variant. The multiverse begins here." },
+  { id: "wif1", t: "What If...? — Season 1", k: "anim", d: "2021-08-11", y: 2023, ph: 4, m: 300, ep: 9, e: 3, pc: 0, c: ["#3b2a1d", "#f2c45a"], hook: "Animated alternate takes. Optional, but sets up Multiverse of Madness." },
+  { id: "wv", t: "WandaVision", k: "series", d: "2021-01-15", y: 2023, ph: 4, m: 350, ep: 9, e: 1, pc: 0, c: ["#c23a6b", "#f2d0a4"], hook: "A sitcom suburb that is not a sitcom." },
+  { id: "sc", t: "Shang-Chi and the Legend of the Ten Rings", k: "film", d: "2021-09-03", y: 2024, ph: 4, m: 132, e: 2, pc: 2, c: ["#7a1a1a", "#e8b04a"], hook: "A valet in San Francisco, and a father with ten rings." },
+  { id: "fws", t: "The Falcon and the Winter Soldier", k: "series", d: "2021-03-19", y: 2024, ph: 4, m: 300, ep: 6, e: 1, pc: 0, c: ["#23324a", "#c9ced6"], hook: "Who carries the shield now?" },
+  { id: "ffh", t: "Spider-Man: Far From Home", k: "film", d: "2019-07-02", y: 2024, ph: 3, m: 129, e: 2, pc: 2, c: ["#2a4fa8", "#b3202a"], w: "sony", hook: "School trip to Europe. Ends with the worst reveal." },
+  { id: "eter", t: "Eternals", k: "film", d: "2021-11-05", y: 2024, ph: 4, m: 156, e: 3, pc: 2, c: ["#5a3a1a", "#f0d27a"], hook: "Ten immortals who were here all along." },
+  { id: "nwh", t: "Spider-Man: No Way Home", k: "film", d: "2021-12-17", y: 2024, ph: 4, m: 148, e: 1, pc: 2, c: ["#b3202a", "#1d2a55"], w: "sony", hook: "Everyone knows who Peter is. A spell goes wrong." },
+  { id: "mom", t: "Doctor Strange in the Multiverse of Madness", k: "film", d: "2022-05-06", y: 2024, ph: 4, m: 126, e: 2, pc: 2, c: ["#3b1a5a", "#e85a8a"], hook: "Strange chases a girl who jumps universes." },
+  { id: "hawk", t: "Hawkeye", k: "series", d: "2021-11-24", y: 2024, ph: 4, m: 290, ep: 6, e: 2, pc: 0, c: ["#4a2a6a", "#f0a030"], hook: "Clint wants Christmas off. Kate Bishop has other plans." },
+  { id: "mk", t: "Moon Knight", k: "series", d: "2022-03-30", y: 2025, ph: 4, m: 280, ep: 6, e: 3, pc: 0, c: ["#2a2a2e", "#e8e2d0"], hook: "A gift-shop clerk wakes up in someone else's life." },
+  { id: "wf", t: "Black Panther: Wakanda Forever", k: "film", d: "2022-11-11", y: 2025, ph: 4, m: 161, e: 2, pc: 1, c: ["#1a2a4a", "#6ab0c8"], hook: "Wakanda grieves while an ocean kingdom rises." },
+  { id: "echo", t: "Echo", k: "series", d: "2024-01-09", y: 2025, ph: 5, m: 210, ep: 5, e: 3, pc: 0, c: ["#3a2418", "#d97a3a"], hook: "Maya Lopez goes home, with Kingpin behind her." },
+  { id: "she", t: "She-Hulk: Attorney at Law", k: "series", d: "2022-08-18", y: 2025, ph: 4, m: 300, ep: 9, e: 3, pc: 0, c: ["#3c6a2a", "#e88ab0"], hook: "A lawyer who is also seven feet tall and green." },
+  { id: "msm", t: "Ms. Marvel", k: "series", d: "2022-06-08", y: 2025, ph: 4, m: 270, ep: 6, e: 2, pc: 0, c: ["#2a4a8a", "#f04a5a"], hook: "A Jersey City teen with a bangle and big dreams." },
+  { id: "tlt", t: "Thor: Love and Thunder", k: "film", d: "2022-07-08", y: 2025, ph: 4, m: 119, e: 3, pc: 2, c: ["#5a2a8a", "#ff6ab0"], hook: "Jane picks up the hammer. Gorr kills gods." },
+  { id: "wbn", t: "Werewolf by Night", k: "special", d: "2022-10-07", y: 2025, ph: 4, m: 53, e: 3, pc: 0, c: ["#1a1a1a", "#c8c8c8"], hook: "A black-and-white monster hunt. One evening." },
+  { id: "hol", t: "The Guardians of the Galaxy Holiday Special", k: "special", d: "2022-11-25", y: 2025, ph: 4, m: 44, e: 3, pc: 0, c: ["#1f5a3a", "#e8463a"], hook: "They kidnap Kevin Bacon for Peter's Christmas." },
+  { id: "quant", t: "Ant-Man and the Wasp: Quantumania", k: "film", d: "2023-02-17", y: 2025, ph: 5, m: 125, e: 3, pc: 2, c: ["#2a1a4a", "#4ac8e8"], hook: "Down into the quantum realm. Meet Kang." },
+  { id: "gotg3", t: "Guardians of the Galaxy Vol. 3", k: "film", d: "2023-05-05", y: 2026, ph: 5, m: 150, e: 2, pc: 2, c: ["#3a1a5a", "#ff8a3a"], hook: "Rocket's story. Bring tissues." },
+  { id: "si", t: "Secret Invasion", k: "series", d: "2023-06-21", y: 2025, ph: 5, m: 270, ep: 6, e: 3, pc: 0, c: ["#1f3a2a", "#9ac86a"], hook: "Fury comes back to a planet full of Skrulls." },
+  { id: "marv", t: "The Marvels", k: "film", d: "2023-11-10", y: 2026, ph: 5, m: 105, e: 3, pc: 1, c: ["#1f2a6a", "#f0c03a"], hook: "Three heroes swap places every time they use their powers." },
+  { id: "loki2", t: "Loki — Season 2", k: "series", d: "2023-10-05", y: 2012, ph: 5, m: 300, ep: 6, e: 2, pc: 0, c: ["#1f4a3a", "#e8c45a"], hook: "The TVA is falling apart, and so is time." },
+  { id: "dw", t: "Deadpool & Wolverine", k: "film", d: "2024-07-26", y: 2024, ph: 5, m: 128, e: 2, pc: 1, c: ["#8a1a1a", "#f0c82a"], hook: "The Fox universe gets a farewell, loudly." },
+  { id: "agatha", t: "Agatha All Along", k: "series", d: "2024-09-18", y: 2026, ph: 5, m: 330, ep: 9, e: 3, pc: 0, c: ["#3a1a4a", "#8ac85a"], hook: "Agatha walks the Witches' Road." },
+  { id: "dd1", t: "Daredevil: Born Again — Season 1", k: "series", d: "2025-03-04", y: 2026, ph: 5, m: 430, ep: 9, e: 2, pc: 0, c: ["#5a0f12", "#1a1a1a"], hook: "Matt Murdock and Wilson Fisk, mayor of New York." },
+  { id: "bnw", t: "Captain America: Brave New World", k: "film", d: "2025-02-14", y: 2027, ph: 5, m: 118, e: 2, pc: 1, c: ["#2a3a5a", "#d63a3a"], hook: "Sam Wilson's first film with the shield." },
+  { id: "tbolts", t: "Thunderbolts*", k: "film", d: "2025-05-02", y: 2027, ph: 5, m: 127, e: 1, pc: 2, c: ["#2a2a2a", "#e8e0c8"], hook: "Rejects and assassins forced into a team." },
+  { id: "iron", t: "Ironheart", k: "series", d: "2025-06-24", y: 2027, ph: 5, m: 260, ep: 6, e: 3, pc: 0, c: ["#6a1a1a", "#f0a03a"], hook: "Riri Williams builds a suit, and makes a deal." },
+  { id: "ff", t: "The Fantastic Four: First Steps", k: "film", d: "2025-07-25", y: 1964, ph: 6, m: 115, e: 1, pc: 2, c: ["#1a4a8a", "#f0e0b0"], hook: "Another Earth, retro future, a family of four." },
+  { id: "wm", t: "Wonder Man", k: "series", d: "2026-01-27", y: 2027, ph: 6, m: 270, ep: 8, e: 3, pc: 0, c: ["#4a1a3a", "#f0c03a"], hook: "An actor with powers chasing a superhero role." },
+  { id: "dd2", t: "Daredevil: Born Again — Season 2", k: "series", d: "2026-03-04", y: 2027, ph: 6, m: 420, ep: 8, e: 2, pc: 0, c: ["#5a0f12", "#2a2a2a"], hook: "Fisk's city, and the people fighting it." },
+  { id: "bnd", t: "Spider-Man: Brand New Day", k: "film", d: "2026-07-31", y: 2027, ph: 6, m: 135, e: 1, pc: 2, c: ["#c0202a", "#1a1a2a"], w: "sony", hook: "Peter, alone and forgotten, starts over." },
+  { id: "vq", t: "VisionQuest", k: "series", d: "2026-10-14", y: 2027, ph: 6, m: 300, ep: 8, e: 2, pc: 0, c: ["#1a3a3a", "#e0e8e8"], hook: "White Vision looks for who he used to be." },
+  { id: "doom", t: "Avengers: Doomsday", k: "film", d: "2026-12-18", y: 2027, ph: 6, m: 150, e: 1, pc: 0, c: ["#1a2a1a", "#7ac85a"], soon: true, hook: "Out December 18. This is where the order is heading." },
+];
+
+// Other Marvel universes, shown as optional branches beside the main line.
+window.PROVIDERS = {
+  IN: { jh: "JioHotstar", sony: "Netflix", rent: "Rent · Prime Video" },
+  US: { jh: "Disney+", sony: "Netflix", rent: "Rent · Apple TV" },
+  UK: { jh: "Disney+", sony: "Netflix", rent: "Rent · Prime Video" },
+};
+
+window.MW = {
+  where: (x, region = "IN") => window.PROVIDERS[region][x.w || "jh"],
+  hours: (m) => (m >= 60 ? `${Math.floor(m / 60)}h ${String(m % 60).padStart(2, "0")}m` : `${m}m`),
+  year: (x) => x.d.slice(0, 4),
+  kindLabel: { film: "Film", series: "Series", special: "Special", short: "Shorts", anim: "Animated" },
+  essLabel: { 1: "Essential", 2: "Recommended", 3: "Optional" },
+  release: () => [...window.TITLES].sort((a, b) => a.d.localeCompare(b.d)),
+  story: () => [...window.TITLES],
+};
+
+// SAMPLE DATA for the mocks: who appears where, written from memory, NOT verified (cameos are partial,
+// Avengers: Doomsday is from the announced cast as I remember it). The real build needs a checked cast list.
+// A thread can pass to a successor (shield, mantle): `pass` names who carries it from that title on.
+window.HEROES = [
+  { id: "ironman", name: "Iron Man", short: "IM", col: "#ff5a4e", t: ["im", "im2", "avg", "im3", "aou", "cw", "hc", "iw", "eg"] },
+  { id: "cap", name: "Captain America", short: "CA", col: "#4f8dff", t: ["catfa", "avg", "tws", "aou", "cw", "iw", "eg", "fws", "bnw", "doom"], pass: { fws: "Sam Wilson takes the shield" } },
+  { id: "thor", name: "Thor", short: "TH", col: "#ffd166", t: ["thor", "avg", "tdw", "aou", "rag", "iw", "eg", "tlt", "doom"] },
+  { id: "hulk", name: "Hulk", short: "HK", col: "#57d27a", t: ["hulk", "avg", "aou", "rag", "iw", "eg", "she"] },
+  { id: "widow", name: "Black Widow", short: "BW", col: "#e8e6e1", t: ["im2", "avg", "tws", "aou", "cw", "bw", "iw", "eg", "hawk", "tbolts", "doom"], pass: { hawk: "Yelena Belova carries it on" } },
+  { id: "spidey", name: "Spider-Man", short: "SM", col: "#ff6fb1", t: ["cw", "hc", "iw", "eg", "ffh", "nwh", "bnd"] },
+  { id: "panther", name: "Black Panther", short: "BP", col: "#a98bff", t: ["cw", "bp", "iw", "eg", "wf", "doom"], pass: { wf: "Shuri takes the mantle" } },
+  { id: "wanda", name: "Scarlet Witch", short: "SW", col: "#ff8f3d", t: ["aou", "cw", "iw", "eg", "wv", "mom"] },
+  { id: "strange", name: "Doctor Strange", short: "DS", col: "#3fd0c9", t: ["ds", "rag", "iw", "eg", "nwh", "mom"] },
+  { id: "loki", name: "Loki", short: "LK", col: "#b5e35a", t: ["thor", "avg", "tdw", "rag", "iw", "eg", "loki1", "loki2", "doom"] },
+];
+
+// More characters for the filters. Appearances written from memory, NOT verified.
+window.HEROES.push(
+  { id: "starlord", name: "Star-Lord", short: "SL", col: "#f6ad55", t: ["gotg", "gotg2", "iw", "eg", "tlt", "hol", "gotg3"] },
+  { id: "antman", name: "Ant-Man", short: "AM", col: "#fb7185", t: ["am", "cw", "amw", "eg", "quant"] },
+  { id: "marvel", name: "Captain Marvel", short: "CM", col: "#93c5fd", t: ["cm", "eg", "marv"] },
+  { id: "fury", name: "Nick Fury", short: "NF", col: "#cbd5e1", t: ["im", "avg", "tws", "aou", "cm", "eg", "ffh", "si", "marv"] },
+  { id: "bucky", name: "Bucky Barnes", short: "BB", col: "#67e8f9", t: ["catfa", "tws", "cw", "iw", "eg", "fws", "tbolts", "doom"] },
+  { id: "hawkeye", name: "Hawkeye", short: "HE", col: "#d8b4fe", t: ["avg", "aou", "cw", "eg", "hawk"] },
+);
+
+</script>
+<script>
+// Shared search for every page: titles, heroes and character names, keyboard first.
+// MCUSearch.mount({ onTitle(id), onHero(id)?, button?: Element, vars?: {bg, ink, sub, line, accent} })
+(() => {
+  const ALIAS = {
+    ironman: ["Tony Stark", "Iron Man"],
+    cap: ["Steve Rogers", "Sam Wilson", "Captain America", "Cap"],
+    thor: ["Thor Odinson", "Thor"],
+    hulk: ["Bruce Banner", "Hulk", "Smart Hulk"],
+    widow: ["Natasha Romanoff", "Yelena Belova", "Black Widow"],
+    spidey: ["Peter Parker", "Spider-Man", "Spidey"],
+    panther: ["T'Challa", "Shuri", "Black Panther", "Wakanda"],
+    wanda: ["Wanda Maximoff", "Scarlet Witch"],
+    strange: ["Stephen Strange", "Doctor Strange"],
+    loki: ["Loki", "Sylvie"],
+    starlord: ["Peter Quill", "Star-Lord", "Guardians"],
+    antman: ["Scott Lang", "Ant-Man", "Hope van Dyne", "Wasp"],
+    marvel: ["Carol Danvers", "Captain Marvel"],
+    fury: ["Nick Fury"],
+    bucky: ["Bucky Barnes", "Winter Soldier", "White Wolf"],
+    hawkeye: ["Clint Barton", "Hawkeye", "Kate Bishop"],
+  };
+  const norm = (s) => String(s).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9*]+/g, " ").trim();
+  // how well q matches text: whole, prefix, word start, anywhere, then letters in order
+  function score(text, q) {
+    if (!q || !text) return 0;
+    if (text === q) return 120;
+    if (text.startsWith(q)) return 100;
+    if (text.includes(" " + q)) return 86;
+    if (text.includes(q)) return 70;
+    if (q.length < 3) return 0;
+    let i = 0, gaps = 0, last = -1;
+    for (let j = 0; j < text.length && i < q.length; j++) if (text[j] === q[i]) { if (last >= 0) gaps += j - last - 1; last = j; i++; }
+    return i === q.length ? Math.max(1, 34 - gaps) : 0;
+  }
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const mark = (s, q) => { const i = s.toLowerCase().indexOf(q); return i < 0 || !q ? esc(s) : esc(s.slice(0, i)) + "<mark>" + esc(s.slice(i, i + q.length)) + "</mark>" + esc(s.slice(i + q.length)); };
+
+  let index = null;
+  function build() {
+    const T = window.TITLES, H = window.HEROES;
+    const heroes = H.map((h) => ({ h, keys: [h.name, ...(ALIAS[h.id] || [])].map(norm) }));
+    const titles = T.map((x, i) => {
+      const hs = H.filter((h) => h.t.includes(x.id));
+      return { x, i, name: norm(x.t), who: hs.map((h) => [h.name, ...(ALIAS[h.id] || [])].map(norm).join(" ")).join(" "), hook: norm(x.hook), hs };
+    });
+    index = { heroes, titles };
+  }
+
+  function search(raw, withHeroes) {
+    if (!index) build();
+    const q = norm(raw);
+    if (!q) return { q, heroes: withHeroes ? index.heroes.map((v) => v.h) : [], titles: index.titles.filter((t) => t.x.e === 1).slice(0, 6).map((t) => ({ t, why: "" })) };
+    const year = /^(19|20)\d\d$/.test(q) ? q : null;
+    const heroes = withHeroes ? index.heroes.map((v) => ({ h: v.h, s: Math.max(...v.keys.map((k) => score(k, q))) })).filter((v) => v.s > 0).sort((a, b) => b.s - a.s).slice(0, 3).map((v) => v.h) : [];
+    const titles = index.titles.map((t) => {
+      let s = score(t.name, q), why = "";
+      const w = score(t.who, q) * 0.82; if (w > s) { s = w; why = t.hs.map((h) => h.name).join(", "); }
+      const k = score(t.hook, q) * 0.5; if (k > s) { s = k; why = t.x.hook; }
+      if (year && (t.x.d.startsWith(year) || String(t.x.y) === year)) { s = Math.max(s, 90); why = t.x.d.startsWith(year) ? "Released " + year : "Happens in " + year; }
+      return { t, s, why };
+    }).filter((r) => r.s > 0).sort((a, b) => b.s - a.s || a.t.i - b.t.i);
+    // once something matches for real, loose letter-order matches are noise
+    const top = titles.length ? titles[0].s : 0, strong = titles.filter((r) => r.s >= top * 0.55);
+    return { q, heroes, titles: strong.slice(0, 8) };
+
+  }
+
+  const CSS = `
+.mcs-ov{position:fixed;inset:0;z-index:100;display:flex;justify-content:center;align-items:flex-start;padding:12vh 16px 16px;background:rgba(8,10,16,.36);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);opacity:0;transition:opacity .16s}
+.mcs-ov.on{opacity:1}
+.mcs{width:min(560px,100%);background:var(--mcs-bg);backdrop-filter:blur(20px) saturate(1.2);-webkit-backdrop-filter:blur(20px) saturate(1.2);color:var(--mcs-ink);border:1px solid var(--mcs-line);border-radius:14px;box-shadow:0 24px 70px -20px rgba(0,0,0,.45);overflow:hidden;transform:translateY(-6px) scale(.985);transition:transform .2s cubic-bezier(.2,.7,.2,1);font:14px/1.4 "Geist",system-ui,sans-serif}
+.mcs-ov.on .mcs{transform:none}
+.mcs-in{display:flex;align-items:center;gap:10px;padding:0 14px;border-bottom:1px solid var(--mcs-line)}
+.mcs-in svg{flex:none;color:var(--mcs-sub)}
+.mcs-in input{flex:1;min-width:0;height:50px;border:0;outline:0;background:none;color:inherit;font:inherit;font-size:16px}
+.mcs-in input::placeholder{color:var(--mcs-sub)}
+.mcs kbd{font:11px/1 "Geist Mono",ui-monospace,monospace;color:var(--mcs-sub);border:1px solid var(--mcs-line);border-radius:5px;padding:3px 5px}
+.mcs-list{max-height:min(420px,58vh);overflow:auto;padding:6px}
+.mcs-h{font-size:11.5px;color:var(--mcs-sub);padding:8px 10px 4px}
+.mcs-r{display:flex;align-items:center;gap:11px;width:100%;border:0;background:none;color:inherit;text-align:left;padding:8px 10px;border-radius:9px;cursor:pointer;font:inherit}
+.mcs-r[aria-selected=true]{background:color-mix(in srgb,var(--mcs-accent) 13%,transparent)}
+.mcs-r .dot{flex:none;width:22px;height:22px;border-radius:6px}
+.mcs-r .av{flex:none;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:9.5px;font-weight:600;color:#111}
+.mcs-r .tx{flex:1;min-width:0}
+.mcs-r .tx b{display:block;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mcs-r .tx small{display:block;color:var(--mcs-sub);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mcs-r .m{flex:none;font:12px "Geist Mono",ui-monospace,monospace;color:var(--mcs-sub)}
+.mcs mark{background:none;color:var(--mcs-accent);font-weight:600}
+.mcs-empty{padding:22px 12px;color:var(--mcs-sub);text-align:center}
+.mcs-ft{display:flex;gap:14px;padding:8px 14px;border-top:1px solid var(--mcs-line);font-size:11.5px;color:var(--mcs-sub)}
+.mcs-ft span{display:inline-flex;align-items:center;gap:5px}
+@media (max-width:600px){.mcs-ov{padding-top:10px}.mcs-ft{display:none}}
+@media (prefers-reduced-motion:reduce){.mcs-ov,.mcs{transition:none}}`;
+
+  function mount(opt) {
+    const style = document.createElement("style"); style.textContent = CSS; document.head.appendChild(style);
+    const v = Object.assign({ bg: "var(--panel)", ink: "var(--ink)", sub: "var(--sub)", line: "var(--line)", accent: "var(--accent)" }, opt.vars || {});
+    const withHeroes = typeof opt.onHero === "function";
+    let ov = null, input = null, list = null, rows = [], sel = 0, lastFocus = null;
+    const icon = `<svg width="17" height="17" viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="6" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M13 13l5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>`;
+    function open() {
+      if (ov) return; lastFocus = document.activeElement;
+      ov = document.createElement("div"); ov.className = "mcs-ov";
+      for (const k in v) ov.style.setProperty("--mcs-" + k, v[k]);
+      ov.innerHTML = `<div class="mcs" role="dialog" aria-modal="true" aria-label="Search"><div class="mcs-in">${icon}<input type="text" enterkeyhint="go" placeholder="Search titles, characters, years" aria-label="Search" autocomplete="off" spellcheck="false" role="combobox" aria-expanded="true" aria-controls="mcs-list"><kbd>Esc</kbd></div><div class="mcs-list" id="mcs-list" role="listbox"></div><div class="mcs-ft"><span><kbd>↑</kbd><kbd>↓</kbd> move</span><span><kbd>↵</kbd> open</span><span><kbd>/</kbd> search anywhere</span></div></div>`;
+      document.body.appendChild(ov);
+      input = ov.querySelector("input"); list = ov.querySelector(".mcs-list");
+      input.addEventListener("input", render);
+      input.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowDown") { e.preventDefault(); move(1); } else if (e.key === "ArrowUp") { e.preventDefault(); move(-1); }
+        else if (e.key === "Enter") { e.preventDefault(); pick(rows[sel]); } else if (e.key === "Escape") { e.preventDefault(); close(); }
+        e.stopPropagation();
+      });
+      ov.addEventListener("pointerdown", (e) => { if (e.target === ov) close(); });
+      list.addEventListener("pointermove", (e) => { const r = e.target.closest(".mcs-r"); if (r) setSel(+r.dataset.i, false); });
+      list.addEventListener("click", (e) => { const r = e.target.closest(".mcs-r"); if (r) pick(rows[+r.dataset.i]); });
+      render(); requestAnimationFrame(() => { ov.classList.add("on"); input.focus(); });
+    }
+    function close() { if (!ov) return; const o = ov; ov = null; o.classList.remove("on"); setTimeout(() => o.remove(), 170); if (lastFocus && lastFocus.focus) lastFocus.focus(); }
+    function render() {
+      const { q, heroes, titles } = search(input.value, withHeroes); rows = []; let h = "";
+      if (heroes.length) { h += `<div class="mcs-h">${q ? "Characters" : "Follow a character"}</div>`; heroes.forEach((x) => { rows.push({ type: "hero", id: x.id }); h += `<button class="mcs-r" role="option" id="mcs-o${rows.length - 1}" data-i="${rows.length - 1}" tabindex="-1"><span class="av" style="background:${x.col}">${esc(x.short)}</span><span class="tx"><b>${mark(x.name, q)}</b><small>${x.t.length} titles</small></span><span class="m">character</span></button>`; }); }
+      if (titles.length) { h += `<div class="mcs-h">${q ? "Titles" : "Start with the essentials"}</div>`; titles.forEach(({ t, why }) => { const x = t.x; rows.push({ type: "title", id: x.id }); h += `<button class="mcs-r" role="option" id="mcs-o${rows.length - 1}" data-i="${rows.length - 1}" tabindex="-1"><span class="dot" style="background:linear-gradient(135deg,${x.c[0]},${x.c[1]})"></span><span class="tx"><b>${mark(x.t.replace(" — ", ": "), q)}</b><small>${why ? esc(why) : esc(window.MW.kindLabel[x.k] + " · " + window.MW.hours(x.m))}</small></span><span class="m">${x.d.slice(0, 4)}</span></button>`; }); }
+      if (!rows.length) h = `<div class="mcs-empty">Nothing matches “${esc(input.value)}”. Try a character like Shuri, a word like Kang, or a year.</div>`;
+      list.innerHTML = h; setSel(0, true);
+    }
+    function setSel(i, scroll) { sel = Math.max(0, Math.min(rows.length - 1, i)); list.querySelectorAll(".mcs-r").forEach((r) => { const on = +r.dataset.i === sel; r.setAttribute("aria-selected", on); if (on) { input.setAttribute("aria-activedescendant", r.id); if (scroll) r.scrollIntoView({ block: "nearest" }); } }); }
+    const move = (d) => setSel(sel + d, true);
+    function pick(r) { if (!r) return; close(); setTimeout(() => (r.type === "hero" ? opt.onHero(r.id) : opt.onTitle(r.id)), 0); }
+    addEventListener("keydown", (e) => {
+      const t = e.target, typing = t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.tagName === "SELECT" || t.isContentEditable);
+      if ((e.key === "k" || e.key === "K") && (e.ctrlKey || e.metaKey)) { e.preventDefault(); ov ? close() : open(); }
+      else if (e.key === "/" && !typing && !ov) { e.preventDefault(); open(); }
+    });
+    if (opt.button) opt.button.addEventListener("click", open);
+    return { open, close };
+  }
+  window.MCUSearch = { mount, search };
+})();
+
+</script>
+<script>
+(() => {
+const ALL = TITLES, REL = [...ALL].sort((a, b) => a.d.localeCompare(b.d));
+const byId = new Map(ALL.map((x) => [x.id, x])), sIdx = new Map(ALL.map((x, i) => [x.id, i])), rIdx = new Map(REL.map((x, i) => [x.id, i]));
+const heroesOf = (id) => HEROES.filter((h) => h.t.includes(id));
+const RM = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const region = () => document.getElementById("reg").value;
+const name = (x) => x.t.replace(" — ", ": ");
+
+/* ---------- a directed graph in watch order ----------
+   An edge a → b means b is the next title after a for some character. A title that no character
+   leads into gets a dashed edge from the title just before it in story order, so every title can
+   be reached from the first one. */
+const EDGES = [], seen = new Map(), IN = new Map(ALL.map((x) => [x.id, []])), OUT = new Map(ALL.map((x) => [x.id, []]));
+const addE = (a, b, k, h) => { const key = a + ">" + b; if (seen.has(key)) { if (h) seen.get(key).hs.push(h); return; } const e = { a, b, k, hs: h ? [h] : [] }; seen.set(key, e); EDGES.push(e); IN.get(b).push(e); OUT.get(a).push(e); };
+HEROES.forEach((h) => { const ts = ALL.filter((x) => h.t.includes(x.id)); for (let i = 1; i < ts.length; i++) addE(ts[i - 1].id, ts[i].id, "hero", h.id); });
+for (let i = 1; i < ALL.length; i++) if (!IN.get(ALL[i].id).length) addE(ALL[i - 1].id, ALL[i].id, "time");
+
+/* ---------- two layouts ---------- */
+// graph: a small force layout run once at load (springs on edges, repulsion, a pull that keeps story time flowing left to right)
+const GRAPH = new Map(); let seed = 7; const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+ALL.forEach((x, i) => GRAPH.set(x.id, { x: i * 17, y: (rnd() - 0.5) * 320, vx: 0, vy: 0 }));
+(function settle() {
+  const ids = ALL.map((x) => x.id);
+  for (let it = 0; it < 420; it++) {
+    const cool = 1 - it / 420;
+    for (let i = 0; i < ids.length; i++) for (let j = i + 1; j < ids.length; j++) { const a = GRAPH.get(ids[i]), b = GRAPH.get(ids[j]); let dx = b.x - a.x, dy = b.y - a.y, d2 = dx * dx + dy * dy + 0.01; if (d2 > 90000) continue; const f = 2600 / d2, d = Math.sqrt(d2); dx /= d; dy /= d; a.vx -= dx * f; a.vy -= dy * f; b.vx += dx * f; b.vy += dy * f; }
+    for (const e of EDGES) { const a = GRAPH.get(e.a), b = GRAPH.get(e.b), dx = b.x - a.x, dy = b.y - a.y, d = Math.hypot(dx, dy) || 1, L = e.k === "hero" ? 64 : 80, f = (d - L) * (e.k === "hero" ? 0.03 : 0.012); a.vx += (dx / d) * f; a.vy += (dy / d) * f; b.vx -= (dx / d) * f; b.vy -= (dy / d) * f; }
+    ALL.forEach((x, i) => { const p = GRAPH.get(x.id); p.vx += (i * 17 - p.x) * 0.008; p.vy += -p.y * 0.0015; p.x += p.vx * 0.5 * cool; p.y += p.vy * 0.5 * cool; p.vx *= 0.6; p.vy *= 0.6; });
+  }
+})();
+// map: layered left to right like a mind map. Column = longest chain of edges from the first title,
+// rows ordered by where their parents sit (two sweeps) so arrows cross as little as possible.
+const MAP = new Map(), DEPTH = new Map();
+ALL.forEach((x) => DEPTH.set(x.id, IN.get(x.id).reduce((m, e) => Math.max(m, DEPTH.get(e.a) + 1), 0)));
+{
+  const cols = []; ALL.forEach((x) => (cols[DEPTH.get(x.id)] ||= []).push(x.id));
+  const row = new Map(); cols.forEach((c) => c.forEach((id, i) => row.set(id, i - (c.length - 1) / 2)));
+  for (let pass = 0; pass < 3; pass++) cols.forEach((c, d) => { if (!d) return; c.sort((a, b) => { const m = (id) => { const ps = IN.get(id); return ps.length ? ps.reduce((s, e) => s + row.get(e.a), 0) / ps.length : 0; }; return m(a) - m(b) || sIdx.get(a) - sIdx.get(b); }); c.forEach((id, i) => row.set(id, i - (c.length - 1) / 2)); });
+  cols.forEach((c, d) => c.forEach((id) => MAP.set(id, { x: d * 165, y: row.get(id) * 42 })));
+}
+const P = new Map(ALL.map((x) => [x.id, { ...GRAPH.get(x.id) }]));
+let layout = "graph", morph = null;
+
+/* ---------- theme ---------- */
+const root = document.documentElement;
+const store = { get: (k) => { try { return localStorage.getItem(k); } catch { return null; } }, set: (k, v) => { try { localStorage.setItem(k, v); } catch {} } };
+if (store.get("mcu-theme")) root.dataset.theme = store.get("mcu-theme");
+const isDark = () => (root.dataset.theme ? root.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches);
+let C = {};
+const readTheme = () => { const cs = getComputedStyle(root), v = (n) => cs.getPropertyValue(n).trim(); C = { bg: v("--bg"), ink: v("--ink"), sub: v("--sub"), faint: v("--faint"), node: v("--node"), link: v("--link"), accent: v("--accent"), path: v("--path"), rel: v("--rel"), sto: v("--sto"), star: v("--star"), dark: isDark(), hero: Object.fromEntries(HEROES.map((h) => [h.id, v("--h-" + h.id)])) }; ask(); };
+document.getElementById("theme").onclick = () => { root.dataset.theme = isDark() ? "light" : "dark"; store.set("mcu-theme", root.dataset.theme); readTheme(); };
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => { if (!root.dataset.theme) readTheme(); });
+
+/* ---------- canvas + camera (it only ever moves because you moved it) ---------- */
+const cv = document.getElementById("g"), cx = cv.getContext("2d");
+let W = 0, H = 0, DPR = 1;
+const cam = { x: 0, y: 0, z: 1 }, tgt = { x: 0, y: 0, z: 1 };
+const Z0 = 0.18, Z1 = 3.2, clampZ = (z) => Math.max(Z0, Math.min(Z1, z));
+const toS = (p) => [W / 2 + (p.x - cam.x) * cam.z, H / 2 + (p.y - cam.y) * cam.z];
+const toW = (sx, sy, c = cam) => [c.x + (sx - W / 2) / c.z, c.y + (sy - H / 2) / c.z];
+function fit(ids = V.map((x) => x.id), src = P) {
+  if (!ids.length) return; let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+  ids.forEach((id) => { const p = src.get(id); x0 = Math.min(x0, p.x); y0 = Math.min(y0, p.y); x1 = Math.max(x1, p.x); y1 = Math.max(y1, p.y); });
+  const pad = W < 860 ? 60 : 180; tgt.x = (x0 + x1) / 2 + (layout === "map" ? 40 : 0); tgt.y = (y0 + y1) / 2; tgt.z = clampZ(Math.min((W - pad) / Math.max(1, x1 - x0 + (layout === "map" ? 160 : 0)), (H - pad - 80) / Math.max(1, y1 - y0)));
+  ask();
+}
+const STARS = Array.from({ length: 220 }, () => ({ x: Math.random(), y: Math.random(), s: Math.random() < 0.1 ? 1.4 : 0.8, a: 0.2 + Math.random() * 0.5 }));
+function resize() { DPR = Math.min(2, devicePixelRatio || 1); W = innerWidth; H = innerHeight; cv.width = W * DPR; cv.height = H * DPR; cx.setTransform(DPR, 0, 0, DPR, 0, 0); ask(); }
+
+/* ---------- state ---------- */
+const F = { heroes: new Set(), phases: new Set(), types: new Set(), ess: false, from: 2008, to: 2026 };
+const typeOf = (x) => (x.k === "film" ? "film" : x.k === "series" ? "series" : "other");
+const match = (x) => (!F.heroes.size || heroesOf(x.id).some((h) => F.heroes.has(h.id))) && (!F.phases.size || F.phases.has(x.ph)) && (!F.types.size || F.types.has(typeOf(x))) && (!F.ess || x.e === 1) && +x.d.slice(0, 4) >= F.from && +x.d.slice(0, 4) <= F.to;
+let mode = "explore", order = "story", V = [], vSet = new Set(), ti = 0, sel = null, hover = null;
+// the route to a title is the watch order up to it: every title before it (in the chosen order, through the filters), none skipped
+let PATH = { ids: new Set(), seq: [] };
+const routeTo = (id) => { const i = V.findIndex((x) => x.id === id); return i < 0 ? [] : V.slice(0, i + 1).map((x) => x.id); };
+const setPath = (id) => { const seq = id ? routeTo(id) : []; PATH = { ids: new Set(seq), seq }; };
+const isStart = (id) => V[0] && V[0].id === id;
+const A = new Map(ALL.map((x) => [x.id, { a: 0, r: 0 }]));
+const born = performance.now();
+
+/* ---------- drawing, on demand only ---------- */
+let raf = 0;
+function ask() { if (!raf) raf = requestAnimationFrame(frame); }
+const arrow = (x1, y1, x2, y2, r, s) => { const ang = Math.atan2(y2 - y1, x2 - x1), tx = x2 - Math.cos(ang) * (r + 2), ty = y2 - Math.sin(ang) * (r + 2); cx.beginPath(); cx.moveTo(tx, ty); cx.lineTo(tx - Math.cos(ang - 0.42) * s, ty - Math.sin(ang - 0.42) * s); cx.lineTo(tx - Math.cos(ang + 0.42) * s, ty - Math.sin(ang + 0.42) * s); cx.closePath(); cx.fill(); };
+function frame(t) {
+  raf = 0; let moving = false;
+  if (morph) { const k = Math.min(1, (t - morph.t0) / 750), e = k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2; for (const x of ALL) { const a = morph.from.get(x.id), b = morph.to.get(x.id), p = P.get(x.id); p.x = a.x + (b.x - a.x) * e; p.y = a.y + (b.y - a.y) * e; } if (k < 1) moving = true; else morph = null; }
+  const kk = RM ? 1 : 0.2;
+  for (const n of ["x", "y", "z"]) { const d = tgt[n] - cam[n]; if (Math.abs(d) > (n === "z" ? 0.0005 : 0.05)) { cam[n] += d * kk; moving = true; } else cam[n] = tgt[n]; }
+  const focus = hover || sel || (mode === "travel" && V[ti] ? V[ti].id : null), near = focus ? new Set([...IN.get(focus).map((e) => e.a), ...OUT.get(focus).map((e) => e.b)]) : null;
+  for (const x of ALL) { const s = A.get(x.id), inV = vSet.has(x.id), intro = RM ? 1 : Math.min(1, Math.max(0, (t - born - sIdx.get(x.id) * 14) / 500));
+    const lit = !focus || x.id === focus || near.has(x.id) || PATH.ids.has(x.id);
+    const ta = (inV ? (lit ? 1 : 0.2) : 0.08) * intro, tr = (x.e === 1 ? 5 : x.e === 2 ? 3.8 : 3) * (x.id === focus ? 1.45 : 1) * intro;
+    if (Math.abs(ta - s.a) > 0.01 || Math.abs(tr - s.r) > 0.02) { s.a += (ta - s.a) * (RM ? 1 : 0.22); s.r += (tr - s.r) * (RM ? 1 : 0.25); moving = true; } else { s.a = ta; s.r = tr; } }
+  cx.fillStyle = C.bg; cx.fillRect(0, 0, W, H);
+  const T = Math.max(W, H);
+  for (const s of STARS) { const px = (((s.x * T - cam.x * 0.08) % T) + T) % T, py = (((s.y * T - cam.y * 0.08) % T) + T) % T; if (px > W || py > H) continue; cx.fillStyle = `rgba(${C.star},${s.a * (C.dark ? 0.45 : 0.18)})`; cx.fillRect(px, py, s.s, s.s); }
+  // edges: arrows point the way you watch, earlier to later
+  const curved = layout === "map" && !morph, sz = Math.max(4, Math.min(8, 6 * Math.sqrt(cam.z))), showArrows = cam.z > 0.45 || curved;
+  const drawEdge = (e, col, alpha, w, dash) => {
+    const [x1, y1] = toS(P.get(e.a)), [x2, y2] = toS(P.get(e.b)), r2 = A.get(e.b).r * Math.max(0.75, Math.min(1.6, Math.sqrt(cam.z)));
+    cx.strokeStyle = cx.fillStyle = col; cx.globalAlpha = alpha; cx.lineWidth = w; if (dash) cx.setLineDash([3, 4]);
+    cx.beginPath(); cx.moveTo(x1, y1);
+    if (curved) { const mx = (x1 + x2) / 2; cx.bezierCurveTo(mx, y1, mx, y2, x2 - (r2 + 3), y2); } else cx.lineTo(x2, y2);
+    cx.stroke(); cx.setLineDash([]);
+    if (showArrows) curved ? arrow(x2 - 20, y2, x2, y2, r2, sz) : arrow(x1, y1, x2, y2, r2, sz);
+  };
+  // each arrow wears the colour of the character it follows (a filtered character wins when an edge carries several)
+  const soften = (hex) => { if (!C.dark) return hex; const n = parseInt(hex.slice(1), 16), m = (c) => Math.round(c + (255 - c) * 0.45); return `rgb(${m(n >> 16)},${m((n >> 8) & 255)},${m(n & 255)})`; };
+  const heroCol = (e) => { if (!e.hs.length) return null; const h = e.hs.find((id) => F.heroes.has(id)) || e.hs[0]; return soften(C.hero[h]); };
+  const soft = C.dark ? 0.32 : 0.38;
+  for (const e of EDGES) { const both = vSet.has(e.a) && vSet.has(e.b), a = Math.min(A.get(e.a).a, A.get(e.b).a); if (a < 0.03) continue;
+    const hot = both && focus && (e.a === focus || e.b === focus), hc = heroCol(e), picked = F.heroes.size && e.hs.some((id) => F.heroes.has(id));
+    drawEdge(e, hc || C.link, hot ? (C.dark ? 0.7 : 0.6) : !both ? a * 0.2 : focus ? a * 0.15 : F.heroes.size ? (picked ? 0.7 : 0.1) : a * (hc ? soft : 0.8), hot ? 1.5 : picked ? 1.4 : 1.1, e.k === "time"); }
+  // the path from the first film: a bright ink line with a halo that separates it from every character colour
+  // the route steps through every title in order; in the map it bends through each one instead of skimming past
+  const seg = []; for (let i = 1; i < PATH.seq.length; i++) seg.push({ a: PATH.seq[i - 1], b: PATH.seq[i] });
+  for (const e of seg) drawEdge(e, C.bg, 0.6, 4.5, false);
+  // each step of the route gets its own colour, picked at random but stable per step, never the same as the step before
+  // soft pastels: on dark, each colour is mixed toward white; on light, the plain colour at low opacity
+  const pal = Object.values(C.hero).map(soften), ra = C.dark ? 0.6 : 0.5; let prev = -1;
+  seg.forEach((e) => { const h = [...(e.a + e.b)].reduce((t, c) => (t * 31 + c.charCodeAt(0)) >>> 0, 7); let k = h % pal.length; if (k === prev) k = (k + 1 + (h >>> 8) % (pal.length - 1)) % pal.length; prev = k; drawEdge(e, pal[k], ra, 2, false); });
+  cx.globalAlpha = 1;
+  // the travelled route
+  // nodes
+  for (const x of ALL) { const s = A.get(x.id); if (s.a < 0.02) continue; const [sx, sy] = toS(P.get(x.id)); if (sx < -40 || sy < -40 || sx > W + 40 || sy > H + 40) continue;
+    const isF = x.id === focus, onPath = PATH.ids.has(x.id), r = s.r * Math.max(0.75, Math.min(1.6, Math.sqrt(cam.z)));
+    if (isF) { cx.fillStyle = C.accent; cx.globalAlpha = 0.18; cx.beginPath(); cx.arc(sx, sy, r * 2.6, 0, 6.283); cx.fill(); }
+    cx.globalAlpha = s.a; cx.fillStyle = isF ? C.accent : onPath ? C.path : C.node; cx.beginPath(); cx.arc(sx, sy, r, 0, 6.283); cx.fill();
+    if (isStart(x.id) && s.a > 0.5) { cx.strokeStyle = C.path; cx.lineWidth = 1.2; cx.beginPath(); cx.arc(sx, sy, r + 4, 0, 6.283); cx.stroke(); } }
+  // labels: focus, its neighbours and the path first; then essentials when zoomed out, everything when close; never overlapping
+  const boxes = [], prio = (x) => (x.id === focus ? 0 : PATH.ids.has(x.id) ? 1 : near && near.has(x.id) ? 2 : isStart(x.id) ? 2 : 3 + x.e);
+  const order2 = [...ALL].sort((a, b) => prio(a) - prio(b));
+  cx.textBaseline = "middle";
+  for (const x of order2) { const s = A.get(x.id); if (s.a < 0.15 || !vSet.has(x.id)) continue; const isF = x.id === focus, imp = prio(x) <= 2;
+    const show = imp || (!focus && (cam.z > (curved ? 0.55 : 1.35) || (cam.z > (curved ? 0.3 : 0.62) && x.e === 1))); if (!show) continue;
+    const [sx, sy] = toS(P.get(x.id)); if (sx < -200 || sy < -20 || sx > W + 20 || sy > H + 20) continue;
+    cx.font = `${isF ? 600 : x.e === 1 || imp ? 500 : 400} ${isF ? 13.5 : 12}px Geist, system-ui`;
+    let label = (isStart(x.id) && !isF ? "Start · " : "") + name(x);
+    // in the map, a quiet label is trimmed to its column so neighbours stay readable
+    if (curved && !imp) { const room = 165 * cam.z - 22; if (room < 40) continue; if (cx.measureText(label).width > room) { while (label.length > 4 && cx.measureText(label + "…").width > room) label = label.slice(0, -1); label += "…"; } }
+    const w = cx.measureText(label).width, lx = sx + s.r * 1.4 + 6, b = [lx - 4, sy - 10, lx + w + 4, sy + 10];
+    if (!isF && boxes.some((q) => !(b[2] < q[0] || b[0] > q[2] || b[3] < q[1] || b[1] > q[3]))) continue; boxes.push(b);
+    if (imp) { cx.globalAlpha = 0.85; cx.fillStyle = C.bg; cx.beginPath(); cx.roundRect(b[0], b[1], b[2] - b[0], b[3] - b[1], 5); cx.fill(); }
+    cx.globalAlpha = isF ? 1 : Math.min(1, s.a + 0.1); cx.fillStyle = isF ? C.ink : PATH.ids.has(x.id) ? C.path : x.e === 1 || imp ? C.ink : C.sub; cx.fillText(label, lx, sy); }
+  cx.globalAlpha = 1;
+  if (moving || (!RM && t - born < 1400)) ask();
+}
+
+/* ---------- filters ---------- */
+function rebuild(refit = true) {
+  const keep = V[ti] ? V[ti].id : null;
+  V = (order === "story" ? ALL : REL).filter(match); vSet = new Set(V.map((x) => x.id));
+  ti = Math.max(0, keep ? V.findIndex((x) => x.id === keep) : 0); if (ti < 0) ti = 0;
+  const n = F.heroes.size + F.phases.size + F.types.size + (F.ess ? 1 : 0) + (F.from !== 2008 || F.to !== 2026 ? 1 : 0);
+  document.getElementById("fn").textContent = n || "";
+  document.getElementById("count").textContent = n ? `${V.length} of ${ALL.length} titles` : `${ALL.length} titles`;
+  document.getElementById("fsum").textContent = `${V.length} title${V.length === 1 ? "" : "s"} · ${MW.hours(V.filter((x) => !x.soon).reduce((s, x) => s + x.m, 0))}`;
+  document.querySelectorAll("#fH .chip").forEach((b) => b.setAttribute("aria-pressed", F.heroes.has(b.dataset.h)));
+  document.querySelectorAll("#fP .chip").forEach((b) => b.setAttribute("aria-pressed", F.phases.has(+b.dataset.p)));
+  document.querySelectorAll("#fT .chip").forEach((b) => b.setAttribute("aria-pressed", F.types.has(b.dataset.t)));
+  document.querySelectorAll("#fO .chip").forEach((b) => b.setAttribute("aria-pressed", b.dataset.o === order));
+  document.getElementById("fE").setAttribute("aria-pressed", F.ess); fFrom.value = F.from; fTo.value = F.to;
+  if (sel && !vSet.has(sel)) closeCard();
+  if (mode === "travel") goTo(ti); else if (refit && V.length) fit();
+  ask();
+}
+const fH = document.getElementById("fH"), fP = document.getElementById("fP"), fT = document.getElementById("fT"), fFrom = document.getElementById("fFrom"), fTo = document.getElementById("fTo");
+fH.innerHTML = HEROES.map((h) => `<button class="chip" style="--c:var(--h-${h.id})" data-h="${h.id}" aria-pressed="false"><i></i>${h.name}<small>${h.t.length}</small></button>`).join("");
+fP.innerHTML = [1, 2, 3, 4, 5, 6].map((p) => `<button class="chip" data-p="${p}" aria-pressed="false">${p}</button>`).join("");
+fT.innerHTML = [["film", "Films"], ["series", "Series"], ["other", "Specials"]].map(([k, n]) => `<button class="chip" data-t="${k}" aria-pressed="false">${n}</button>`).join("");
+const years = [...new Set(REL.map((x) => +x.d.slice(0, 4)))]; fFrom.innerHTML = fTo.innerHTML = years.map((y) => `<option>${y}</option>`).join("");
+const toggle = (set, v) => (set.has(v) ? set.delete(v) : set.add(v));
+fH.onclick = (e) => { const b = e.target.closest(".chip"); if (b) { toggle(F.heroes, b.dataset.h); rebuild(); } };
+fP.onclick = (e) => { const b = e.target.closest(".chip"); if (b) { toggle(F.phases, +b.dataset.p); rebuild(); } };
+fT.onclick = (e) => { const b = e.target.closest(".chip"); if (b) { toggle(F.types, b.dataset.t); rebuild(); } };
+document.getElementById("fHall").onclick = () => { F.heroes.clear(); rebuild(); };
+document.getElementById("fO").onclick = (e) => { const b = e.target.closest(".chip"); if (b) { order = b.dataset.o; rebuild(); } };
+document.getElementById("fE").onclick = () => { F.ess = !F.ess; rebuild(); };
+fFrom.onchange = () => { F.from = +fFrom.value; if (F.to < F.from) F.to = F.from; rebuild(); };
+fTo.onchange = () => { F.to = +fTo.value; if (F.from > F.to) F.from = F.to; rebuild(); };
+const clearAll = () => { F.heroes.clear(); F.phases.clear(); F.types.clear(); F.ess = false; F.from = 2008; F.to = 2026; };
+document.getElementById("fclear").onclick = () => { clearAll(); rebuild(); };
+const pop = document.getElementById("pop"), fbtn = document.getElementById("fbtn");
+fbtn.onclick = () => { const on = !pop.classList.contains("on"); pop.classList.toggle("on", on); fbtn.setAttribute("aria-expanded", on); };
+addEventListener("pointerdown", (e) => { if (pop.classList.contains("on") && !pop.contains(e.target) && !fbtn.contains(e.target)) { pop.classList.remove("on"); fbtn.setAttribute("aria-expanded", false); } });
+
+/* ---------- card ---------- */
+const card = document.getElementById("card");
+function openCard(id) {
+  sel = id; setPath(id); const x = byId.get(id), hs = heroesOf(id), next = OUT.get(id), before = PATH.seq.slice(0, -1), mins = before.filter((b) => !byId.get(b).soon).reduce((t, b) => t + byId.get(b).m, 0);
+  const stepsHtml = before.length ? `<ol class="route">${PATH.seq.map((s, i, arr) => `<li><button data-go="${s}" class="${i === arr.length - 1 ? "here" : ""}"><span class="mono">${i + 1}</span>${name(byId.get(s))}</button></li>`).join("")}</ol>` : `<div class="steps"><em>This is where it starts.</em></div>`;
+  card.innerHTML = `<button class="x" aria-label="Close">✕</button><div class="k"><i style="background:linear-gradient(135deg,${x.c[0]},${x.c[1]})"></i>${MW.kindLabel[x.k]} · Phase ${x.ph} · ${MW.essLabel[x.e]}</div>
+    <h2>${name(x)}</h2><p>${x.hook}</p>
+    <dl><dt>Released</dt><dd class="mono">${x.d.slice(0, 4)} · #${rIdx.get(id) + 1}</dd><dt>Happens</dt><dd class="mono">${x.y} · #${sIdx.get(id) + 1}</dd><dt>Runtime</dt><dd class="mono">${MW.hours(x.m)}${x.ep ? ` · ${x.ep} eps` : ""}</dd><dt>After credits</dt><dd>${x.pc ? `${x.pc} scene${x.pc > 1 ? "s" : ""}` : "None"}</dd></dl>
+    ${hs.length ? `<div class="who">${hs.map((h) => `<button class="chip" style="--c:var(--h-${h.id})" data-h="${h.id}" aria-pressed="${F.heroes.has(h.id)}" title="Show only ${h.name}"><i></i>${h.name}</button>`).join("")}</div>` : ""}
+    <h4>Watch first <span>${before.length} title${before.length === 1 ? "" : "s"}${before.length ? " · " + MW.hours(mins) : ""}</span></h4>${stepsHtml}
+    ${next.length ? `<h4>Leads to</h4><div class="steps">${next.map((e) => `<button data-go="${e.b}">${name(byId.get(e.b))}</button>`).join("")}</div>` : ""}
+    <div class="watch"><b>${x.soon ? "In cinemas" : MW.where(x, region())}</b><span>${x.soon ? "Dec 18, 2026" : "Streaming in " + region()}</span></div>`;
+  card.classList.add("on"); ask();
+}
+function closeCard() { sel = null; setPath(mode === "travel" && V[ti] ? V[ti].id : null); card.classList.remove("on"); ask(); }
+card.onclick = (e) => { if (e.target.closest(".x")) return closeCard(); const g = e.target.closest("[data-go]"); if (g) return showTitle(g.dataset.go); const h = e.target.closest("[data-h]"); if (h) { toggle(F.heroes, h.dataset.h); rebuild(); openCard(sel); } };
+document.getElementById("reg").onchange = () => sel && openCard(sel);
+
+/* ---------- modes + layouts ---------- */
+const travel = document.getElementById("travel"), hint = document.getElementById("hint");
+function setMode(m) {
+  mode = m; document.querySelectorAll("#mode button").forEach((b) => b.setAttribute("aria-pressed", b.dataset.m === m));
+  travel.classList.toggle("off", m !== "travel"); hint.style.opacity = m === "travel" ? 0 : 1;
+  if (m === "travel") { tgt.z = clampZ(Math.max(cam.z, W < 860 ? 1.1 : 1.4)); goTo(ti); } else { closeCard(); fit(); }
+  ask();
+}
+document.getElementById("mode").onclick = (e) => { const b = e.target.closest("button"); if (b && b.dataset.m !== mode) setMode(b.dataset.m); };
+function setLayout(l) {
+  if (l === layout) return; layout = l; document.querySelectorAll("#layout button").forEach((b) => b.setAttribute("aria-pressed", b.dataset.l === l));
+  const to = l === "map" ? MAP : GRAPH; morph = { t0: performance.now(), from: new Map([...P].map(([k, v]) => [k, { x: v.x, y: v.y }])), to };
+  if (RM) { for (const [k, v] of to) Object.assign(P.get(k), { x: v.x, y: v.y }); morph = null; }
+  const focusId = sel || (mode === "travel" && V[ti] ? V[ti].id : null);
+  if (focusId) { const p = to.get(focusId); tgt.x = p.x + (W > 860 ? 120 / tgt.z : 0); tgt.y = p.y; } else fit(V.map((x) => x.id), to);
+  store.set("mcu-layout", l); ask();
+}
+document.getElementById("layout").onclick = (e) => { const b = e.target.closest("button"); if (b) setLayout(b.dataset.l); };
+function center(id, zMin) { const p = (morph ? morph.to : P).get(id), z = clampZ(Math.max(tgt.z, zMin)); tgt.z = z; tgt.x = p.x + (W > 860 ? 120 / z : 0); tgt.y = p.y + (W > 860 ? 0 : 60 / z); ask(); }
+function goTo(i) {
+  if (!V.length) return; ti = Math.max(0, Math.min(V.length - 1, i)); const x = V[ti];
+  center(x.id, W < 860 ? 1.1 : 1.4); openCard(x.id);
+  document.getElementById("tk").textContent = `${order === "story" ? "Story" : "Release"} order · ${ti + 1} of ${V.length}`;
+  document.getElementById("tt").textContent = name(x);
+  document.getElementById("tm").style.width = ((ti + 1) / V.length) * 100 + "%"; ask();
+}
+document.getElementById("prev").onclick = () => goTo(ti - 1);
+document.getElementById("next").onclick = () => goTo(ti + 1);
+document.getElementById("treset").onclick = () => goTo(0);
+// search and links in the card both land here: show the title, its path from the first film, and what it leads to
+function showTitle(id) {
+  if (!byId.has(id)) return;
+  if (!vSet.has(id)) { clearAll(); rebuild(false); }
+  if (mode === "travel") return goTo(V.findIndex((x) => x.id === id));
+  center(id, 1.3); openCard(id); history.replaceState(null, "", "#t=" + id);
+}
+function showHero(h) { F.heroes.clear(); F.heroes.add(h); rebuild(); history.replaceState(null, "", "#h=" + h); }
+
+/* ---------- input: drag, wheel, pinch, hover, click ---------- */
+const ptrs = new Map(); let dragged = false, last = null, pinch0 = null;
+const pick = (sx, sy) => { let best = null, bd = 16; for (const x of ALL) { if (!vSet.has(x.id)) continue; const [px, py] = toS(P.get(x.id)), d = Math.hypot(px - sx, py - sy); if (d < bd) { bd = d; best = x.id; } } return best; };
+cv.addEventListener("pointerdown", (e) => { cv.setPointerCapture(e.pointerId); ptrs.set(e.pointerId, [e.clientX, e.clientY]); dragged = false; last = [e.clientX, e.clientY]; if (ptrs.size === 2) { const [a, b] = [...ptrs.values()]; pinch0 = { d: Math.hypot(a[0] - b[0], a[1] - b[1]), z: tgt.z }; } });
+cv.addEventListener("pointermove", (e) => {
+  if (ptrs.has(e.pointerId)) { ptrs.set(e.pointerId, [e.clientX, e.clientY]);
+    if (ptrs.size === 2 && pinch0) { const [a, b] = [...ptrs.values()]; tgt.z = cam.z = clampZ((pinch0.z * Math.hypot(a[0] - b[0], a[1] - b[1])) / pinch0.d); dragged = true; ask(); return; }
+    const dx = e.clientX - last[0], dy = e.clientY - last[1]; if (Math.abs(dx) + Math.abs(dy) > 2) dragged = true;
+    if (dragged) { cv.classList.add("drag"); tgt.x = cam.x -= dx / cam.z; tgt.y = cam.y -= dy / cam.z; last = [e.clientX, e.clientY]; ask(); } return; }
+  const id = pick(e.clientX, e.clientY); if (id !== hover) { hover = id; cv.classList.toggle("pt", !!id); ask(); }
+  const tip = document.getElementById("tip"); if (id && id !== sel) { const x = byId.get(id); tip.textContent = `${name(x)} · ${x.d.slice(0, 4)}`; tip.style.left = e.clientX + "px"; tip.style.top = e.clientY + "px"; tip.classList.add("on"); } else tip.classList.remove("on");
+});
+const up = (e) => { ptrs.delete(e.pointerId); cv.classList.remove("drag"); if (ptrs.size < 2) pinch0 = null;
+  if (!dragged && e.type === "pointerup") { const id = pick(e.clientX, e.clientY); if (id) { if (mode === "travel") goTo(V.findIndex((x) => x.id === id)); else { openCard(id); history.replaceState(null, "", "#t=" + id); } } else if (mode === "explore" && sel) { closeCard(); history.replaceState(null, "", location.pathname); } } };
+cv.addEventListener("pointerup", up); cv.addEventListener("pointercancel", up);
+cv.addEventListener("pointerleave", () => { if (hover) { hover = null; ask(); } document.getElementById("tip").classList.remove("on"); });
+let acc = 0, lastStep = 0;
+cv.addEventListener("wheel", (e) => { e.preventDefault();
+  if (mode === "travel" && !e.ctrlKey) { acc += e.deltaY; const now = performance.now(); if (Math.abs(acc) > 50 && now - lastStep > 280) { goTo(ti + Math.sign(acc)); acc = 0; lastStep = now; } return; }
+  const [wx, wy] = toW(e.clientX, e.clientY, tgt), z = clampZ(tgt.z * Math.exp(-e.deltaY * 0.0016)); tgt.x = wx - (e.clientX - W / 2) / z; tgt.y = wy - (e.clientY - H / 2) / z; tgt.z = z; ask(); }, { passive: false });
+const zoomBy = (f) => { tgt.z = clampZ(tgt.z * f); ask(); };
+document.getElementById("zin").onclick = () => zoomBy(1.35); document.getElementById("zout").onclick = () => zoomBy(1 / 1.35); document.getElementById("zfit").onclick = () => fit();
+addEventListener("keydown", (e) => { if (e.target.closest("select,input")) return;
+  if (e.key === "Escape") { pop.classList.remove("on"); closeCard(); }
+  else if (mode === "travel" && (e.key === "ArrowRight" || e.key === "ArrowDown")) { e.preventDefault(); goTo(ti + 1); }
+  else if (mode === "travel" && (e.key === "ArrowLeft" || e.key === "ArrowUp")) { e.preventDefault(); goTo(ti - 1); }
+  else if (e.key === "Home") goTo(0); else if (e.key === "+" || e.key === "=") zoomBy(1.35); else if (e.key === "-") zoomBy(1 / 1.35); else if (e.key === "0") fit();
+  else if (e.key === "m") setLayout(layout === "map" ? "graph" : "map"); });
+
+/* ---------- start ---------- */
+addEventListener("resize", resize); resize(); readTheme();
+V = ALL.slice(); vSet = new Set(V.map((x) => x.id));
+const deep = location.hash, savedLayout = store.get("mcu-layout");
+if (deep === "#map" || savedLayout === "map") { layout = "map"; document.querySelectorAll("#layout button").forEach((b) => b.setAttribute("aria-pressed", b.dataset.l === "map")); for (const [k, v] of MAP) Object.assign(P.get(k), { x: v.x, y: v.y }); }
+rebuild(); Object.assign(cam, tgt);
+MCUSearch.mount({ onTitle: showTitle, onHero: showHero, button: document.getElementById("sbtn") });
+if (deep === "#travel") setMode("travel");
+else if (deep.startsWith("#t=")) showTitle(deep.slice(3));
+else if (deep.startsWith("#h=") && HEROES.some((h) => h.id === deep.slice(3))) showHero(deep.slice(3));
+})();
 </script>
 </body>
 </html>
